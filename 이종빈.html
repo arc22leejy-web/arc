@@ -3,1164 +3,871 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>스마트 건설현장 안전 점검 시스템</title>
-    <!-- Tailwind CSS CDN -->
+    <title>TBM Human Factor Checklist Dashboard</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Noto Sans KR -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <!-- FontAwesome for Premium Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Noto Sans KR', 'Inter', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
         }
-        /* Custom scrollbar for checklist cards */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        /* Print Styles to convert Web App to a clean formal paper document */
+        /* Custom print optimization styles */
         @media print {
             body {
-                background-color: #fff;
-                color: #000;
+                background-color: white !important;
+                color: black !important;
             }
             .no-print {
                 display: none !important;
             }
-            .print-layout {
-                display: block !important;
-                padding: 0 !important;
+            .print-full-width {
+                width: 100% !important;
+                max-width: 100% !important;
                 margin: 0 !important;
+                padding: 0 !important;
                 box-shadow: none !important;
             }
-            .print-page-break {
-                page-break-after: always;
+            .print-break-inside-prevent {
+                page-break-inside: avoid;
             }
-            input, select, textarea {
-                border: none !important;
-                background: transparent !important;
-                pointer-events: none !important;
-                padding: 0 !important;
-                font-weight: bold;
-            }
-            /* Style adjustments for print view checkboxes */
-            .print-status-checked {
-                font-weight: bold;
-                text-decoration: underline;
-                color: #000 !important;
+            .print-border {
+                border: 1px solid #cbd5e1 !important;
             }
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        safety: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            500: '#f59e0b', /* Safety Yellow/Amber Accent */
-                            600: '#d97706',
-                            700: '#b45309',
-                        },
-                        danger: {
-                            50: '#fef2f2',
-                            100: '#fee2e2',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                        },
-                        pass: {
-                            500: '#10b981',
-                            600: '#059669',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
 
-    <!-- Header -->
-    <header class="bg-slate-900 text-white shadow-lg border-b-4 border-safety-500 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="bg-safety-500 text-slate-900 p-2.5 rounded-lg font-black text-2xl flex items-center justify-center animate-pulse">
-                    <i class="fa-solid fa-helmet-safety"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl md:text-2xl font-black tracking-tight flex items-center gap-2">
-                        스마트 안전점검 체크리스트 
-                        <span class="text-xs bg-safety-500 text-slate-900 px-2 py-0.5 rounded font-bold uppercase tracking-wider">KOSHA Standard</span>
-                    </h1>
-                    <p class="text-xs text-slate-400">현장 안전은 생명입니다. 매일 점검하고 신속하게 조치하세요.</p>
-                </div>
+<header class="bg-slate-900 text-white shadow-md no-print">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <div class="bg-amber-500 text-slate-950 p-2.5 rounded-xl shadow-inner flex items-center justify-center">
+                <i class="fa-solid fa-brain text-xl"></i>
             </div>
-            <div class="flex items-center gap-2 text-sm">
-                <span class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-md border border-slate-700 font-mono">
-                    <i class="fa-solid fa-clock mr-1.5 text-safety-500"></i><span id="header-time">2026-07-07</span>
-                </span>
-                <button onclick="resetWholeForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-3 py-1.5 rounded-md border border-slate-700 flex items-center gap-1.5 transition-all">
-                    <i class="fa-solid fa-rotate-right text-xs"></i> 초기화
-                </button>
+            <div>
+                <h1 class="text-lg sm:text-xl font-bold tracking-tight">TBM 휴먼 에러 & 심리 분석 시스템</h1>
+                <p class="text-xs text-slate-400">Human Factors & Safety Psychology Checklist</p>
             </div>
         </div>
-    </header>
+        <div class="flex items-center gap-2">
+            <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition">
+                <i class="fa-solid fa-square-poll-horizontal mr-1.5"></i>점검 등록
+            </button>
+            <button onclick="switchTab('history')" id="tab-btn-history" class="px-4 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                <i class="fa-solid fa-history mr-1.5"></i>과거 이력
+            </button>
+        </div>
+    </div>
+</header>
 
-    <!-- Main Workspace -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 print-layout">
+<main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 print-full-width">
+    
+    <div id="tab-dashboard" class="space-y-6">
         
-        <!-- DASHBOARD SUMMARY & METRICS -->
-        <section class="mb-6 no-print">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- TBM 기본 정보 카드 -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6 print-border">
+            <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-amber-500 rounded-full"></span>
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900">1. TBM 기본 정보 입력</h2>
+                </div>
+                <span class="no-print bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full font-medium" id="live-clock">시간 동기화 중...</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">점검 일자</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="date" id="tbm-date" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">점검 구역 / 공종</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-map-location-dot absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="tbm-zone" placeholder="예: A구역 지하 1층 철근작업" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">TBM 진행자 (점검자)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user-check absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="tbm-inspector" placeholder="성명을 입력하세요" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4대 핵심 휴먼에러 점검 항목 Grid -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-6 bg-amber-500 rounded-full"></span>
+                <h2 class="text-base sm:text-lg font-bold text-slate-900">2. 아침 TBM 4대 휴먼에러 점검 리스트</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 
-                <!-- Card 1: Total Completion Rate -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
-                    <div class="p-3 bg-indigo-50 text-indigo-500 rounded-xl">
-                        <i class="fa-solid fa-chart-pie text-2xl"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-xs text-slate-400 font-medium">점검 진행률</div>
-                        <div class="flex items-baseline space-x-2">
-                            <span class="text-2xl font-bold" id="metric-progress">0%</span>
-                            <span class="text-xs text-slate-400" id="metric-progress-fraction">0/15</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-1.5 mt-2">
-                            <div id="progress-bar" class="bg-indigo-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <!-- 카테고리 1: 신체 및 정신 건강 스캔 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">1</span>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">신체 및 정신 건강 스캔</h3>
+                                <p class="text-xs text-slate-500">Physiological & Psychological Scan</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Card 2: Pass Count -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
-                    <div class="p-3 bg-emerald-50 text-emerald-500 rounded-xl">
-                        <i class="fa-solid fa-circle-check text-2xl"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs text-slate-400 font-medium">적합 판정</div>
-                        <div class="text-2xl font-bold text-slate-800" id="metric-pass">0 건</div>
-                        <div class="text-xs text-emerald-600 mt-1 font-medium flex items-center">
-                            <i class="fa-solid fa-check mr-1"></i> 준수 완료 항목
+                    <div class="p-5 space-y-4 flex-grow">
+                        <!-- 항목 1 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-1-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-1-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">눈빛 및 표정 스캔</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">오늘따라 유난히 피곤해 보이거나, 초점이 멍하거나, 표정이 어둡고 감정 기복이 심해 보이는 근로자가 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 집중력 저하 사고 위험 1순위 대상자 분류
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Card 3: Fail Count -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
-                    <div class="p-3 bg-red-50 text-red-500 rounded-xl">
-                        <i class="fa-solid fa-circle-xmark text-2xl"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs text-slate-400 font-medium">부적합 (즉각 조치 필요)</div>
-                        <div class="text-2xl font-bold text-danger-500" id="metric-fail">0 건</div>
-                        <div class="text-xs text-red-600 mt-1 font-medium flex items-center">
-                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> 개선 요구서 자동 연계
+                        <hr class="border-slate-100">
+                        <!-- 항목 2 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-1-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-1-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">숙취 및 수면 부족 의심</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">걸음걸이가 비틀거리거나 언행이 느리고, 숙취 냄새 등 전날 과음이나 극심한 피로가 의심되는 근로자가 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 즉시 간이 음주 측정 후 필요시 당일 고위험 작업 배제
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 4: Action Items Progress -->
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-4">
-                    <div class="p-3 bg-amber-50 text-safety-500 rounded-xl">
-                        <i class="fa-solid fa-circle-exclamation text-2xl"></i>
+                <!-- 카테고리 2: 베테랑 작업 태도 관리 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">2</span>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">베테랑 작업 태도 관리</h3>
+                                <p class="text-xs text-slate-500">Work Habit Management</p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="text-xs text-slate-400 font-medium">조치 대상 잔여율</div>
-                        <div class="text-2xl font-bold text-slate-800" id="metric-pending">0%</div>
-                        <div class="text-xs text-slate-500 mt-1" id="metric-pending-fraction">부적합 0건 중 0건 미해결</div>
+                    <div class="p-5 space-y-4 flex-grow">
+                        <!-- 항목 3 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-2-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-2-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">"원래 하던 대로" 증후군</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">"내가 이 일만 10년 넘게 했어"라며 안전모 턱끈 해체, 안전고리 체결 귀찮음 등을 표현하는 베테랑이 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 과신 방지 조치 및 기본 안전 준수 서약 환기
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-slate-100">
+                        <!-- 항목 4 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-2-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-2-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">보호구 착용의 형식화</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">안전벨트를 느슨하게 매거나, 각 작업에 맞는 전용 보호구(보안경, 방진마스크 등)를 착용하지 않은 숙련공이 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 현장에서 즉시 올바른 보호구 착용법 재시연 지도
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카테고리 3: 현장 내 유해 행동 차단 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-cyan-100 text-cyan-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">3</span>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">현장 내 유해 행동 차단</h3>
+                                <p class="text-xs text-slate-500">Unsafe Behavior Control</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4 flex-grow">
+                        <!-- 항목 5 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-3-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-3-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">스마트폰 좀비 방지</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">이동 시, 혹은 장비(굴착기, 크레인 등) 선회 반경 내에서 스마트폰을 보며 걸어 다니는 근로자가 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> "이동 중 스마트폰 절대 사용 금지" 강력 교육
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-slate-100">
+                        <!-- 항목 6 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-3-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-3-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">급하게 서두르는 행동</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">작업 개시 전부터 도구를 챙기며 서두르거나, 정해진 통로가 아닌 지름길(단축 경로)로 급히 이동하려는 작업자가 있는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 작업 순서 재인지 유도 및 불안전 이동 통제
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카테고리 4: 고위험·취약 근로자 케어 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-rose-100 text-rose-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">4</span>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">고위험·취약 근로자 케어</h3>
+                                <p class="text-xs text-slate-500">Vulnerable Workers Care</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-4 flex-grow">
+                        <!-- 항목 7 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-4-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-4-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">신규 및 외국인 밀착 마크</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">오늘 처음 투입된 신규 근로자나 한국어가 서툰 외국인 근로자 옆에 '소통 가이드(안전 멘토)'가 지정되었는가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 멘토 지정 여부 확인 및 이해하기 쉬운 비주얼 지시서 배포
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-slate-100">
+                        <!-- 항목 8 -->
+                        <div class="flex gap-3 items-start group">
+                            <input type="checkbox" id="chk-4-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
+                            <div>
+                                <label for="chk-4-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">고령자 및 지병 보유자 케어</label>
+                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">고혈압 등 기왕증이 있거나 혹서기/혹한기 기온 영향을 많이 받는 고령 근로자의 컨디션은 양호한가?</span>
+                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 혈압 수치 확인 및 그늘막 활용 충분한 휴식 제공
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- GRID WORKSPACE -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- LEFT COLUMN (1/3 Width): INSPECTOR PROFILE & REPORT CONTROLS -->
-            <div class="lg:col-span-1 space-y-6">
-                
-                <!-- Site Details Form -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-file-contract text-safety-500"></i> 점검 개요 작성
-                    </h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">공사(프로젝트)명 <span class="text-red-500">*</span></label>
-                            <input type="text" id="site-name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium" placeholder="예: 서울 마포 업무시설 신축공사">
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">점검 일자 <span class="text-red-500">*</span></label>
-                                <input type="date" id="inspection-date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">점검 구분</label>
-                                <select id="inspection-type" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium">
-                                    <option value="정기">정기 안전점검</option>
-                                    <option value="특별">특별 합동점검</option>
-                                    <option value="일일">일일 일상순찰</option>
-                                    <option value="긴급">태풍/재해 긴급점검</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">안전 점검자 <span class="text-red-500">*</span></label>
-                                <input type="text" id="inspector-name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium" placeholder="홍길동 과장">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">현장 대리인 / 관리 책임자</label>
-                                <input type="text" id="manager-name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium" placeholder="이영희 현장소장">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">점검 구역 / 구체적 위치</label>
-                            <input type="text" id="inspection-zone" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-safety-500 font-medium" placeholder="예: 지상 5층 타설 구역, 지하 주차장 2구역">
-                        </div>
-                    </div>
-                </section>
-
-                <!-- System Action Controls -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 no-print">
-                    <h2 class="text-md font-bold text-slate-800 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-safety-500"></i> 리포트 제어 및 저장
-                    </h2>
-                    <p class="text-xs text-slate-400 mb-4">작성 완료 후 로컬에 영구 저장하거나, 깔끔한 종이 문서 형태로 즉시 출력할 수 있습니다.</p>
-                    <div class="space-y-3">
-                        <button onclick="saveInspection()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
-                            <i class="fa-solid fa-floppy-disk text-safety-500"></i> 점검 결과 브라우저 저장
-                        </button>
-                        <button onclick="window.print()" class="w-full bg-safety-500 hover:bg-safety-600 text-slate-900 font-extrabold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md">
-                            <i class="fa-solid fa-print"></i> PDF 리포트 / 인쇄 출력
-                        </button>
-                    </div>
-                </section>
-
-                <!-- Saved Records History Panel -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 no-print">
-                    <h2 class="text-md font-bold text-slate-800 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-safety-500"></i> 과거 점검 이력
-                    </h2>
-                    <div id="history-container" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">
-                        <p class="text-xs text-slate-400 text-center py-6">저장된 점검 기록이 없습니다.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- RIGHT COLUMN (2/3 Width): THE INTERACTIVE CHECKLIST -->
-            <div class="lg:col-span-2 space-y-6">
-                
-                <!-- Main Safety Checklist Container -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                    
-                    <!-- Checklist Category Tabs Navigation -->
-                    <div class="bg-slate-950 px-4 pt-4 border-b border-slate-800 flex flex-wrap gap-1.5 no-print" id="category-tabs">
-                        <!-- Filled by JS dynamically -->
-                    </div>
-
-                    <!-- Checklist Main Form Table Body -->
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2" id="current-category-title">
-                                <span class="bg-safety-500 text-slate-900 text-xs px-2 py-1 rounded-md" id="current-category-badge">안전</span>
-                                <span>로딩중...</span>
-                            </h2>
-                            <div class="text-xs text-slate-400 font-medium no-print">
-                                카테고리 전체 통과: 
-                                <button onclick="markAllCategory('PASS')" class="text-indigo-600 hover:text-indigo-800 font-bold ml-1">전원 적합</button>
-                            </div>
-                        </div>
-
-                        <!-- Main Questions Container -->
-                        <div id="questions-list-container" class="space-y-4">
-                            <!-- Items dynamically injected -->
-                        </div>
-
-                        <!-- Pagination / Navigation buttons -->
-                        <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center no-print">
-                            <button id="prev-tab-btn" onclick="navigateTab(-1)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-sm flex items-center gap-2 transition-all">
-                                <i class="fa-solid fa-angle-left"></i> 이전 항목
-                            </button>
-                            <span class="text-xs text-slate-400 font-mono" id="tab-indicator">Page 1 of 5</span>
-                            <button id="next-tab-btn" onclick="navigateTab(1)" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-sm flex items-center gap-2 transition-all">
-                                다음 항목 <i class="fa-solid fa-angle-right"></i>
-                            </button>
-                        </div>
+        <!-- 이상 징후 작업자 조치 기록 섹션 -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6 print-border print-break-inside-prevent">
+            <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-rose-500 rounded-full"></span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900">3. 이상 징후 작업자 조치 현황</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">휴먼에러 고위험군이 발견되었을 때 세부 조치사항을 실시간 등록하세요.</p>
                     </div>
                 </div>
-
-                <!-- REAL-TIME ACTION REQUIRED (부적합 처치 대장) -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-4">
-                        <div>
-                            <h2 class="text-lg font-bold text-red-500 flex items-center gap-2">
-                                <i class="fa-solid fa-triangle-exclamation"></i> 부적합 시정조치 요구 대장
-                            </h2>
-                            <p class="text-xs text-slate-400">체크리스트에서 '부적합'으로 판단된 모든 사안이 자동으로 아래 리스트에 연동됩니다.</p>
-                        </div>
-                        <span id="fail-tracker-badge" class="bg-red-50 text-red-600 text-xs font-bold px-3 py-1 rounded-full border border-red-100">조치 대상: 0건</span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse min-w-[600px]">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-400 text-xs font-semibold">
-                                    <th class="py-3 px-2 w-1/12">No</th>
-                                    <th class="py-3 px-2 w-4/12">부적합 적출 내용</th>
-                                    <th class="py-3 px-2 w-2/12">긴급도 (조치 기한)</th>
-                                    <th class="py-3 px-2 w-2/12">조치 책임 부서 / 담당자</th>
-                                    <th class="py-3 px-2 w-2/12 no-print">조치 상태 조절</th>
-                                    <th class="py-3 px-2 w-2/12 hidden print-status-th">결과 확인</th>
-                                </tr>
-                            </thead>
-                            <tbody id="action-items-body" class="divide-y divide-slate-100 text-sm">
-                                <!-- JS Auto Insertion -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="no-fails-placeholder" class="text-center py-8 text-slate-400 text-xs">
-                        <i class="fa-solid fa-circle-check text-emerald-500 text-3xl mb-2 block"></i>
-                        현재 감지된 부적합 사항이 전혀 없습니다. 현장이 안전 상태입니다!
-                    </div>
-                </section>
-
-                <!-- ELECTRONIC SIGN-OFF PANEL -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-signature text-safety-500"></i> 모바일 및 웹 전자 서명란
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Inspector Signature -->
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 flex justify-between items-center">
-                                <span>점검자 서명 <span class="text-red-500">*</span></span>
-                                <button type="button" onclick="clearSignature('canvas-inspector')" class="text-slate-400 hover:text-slate-600 text-[11px] font-semibold no-print">
-                                    <i class="fa-solid fa-eraser"></i> 지우기
-                                </button>
-                            </label>
-                            <div class="relative border border-slate-200 bg-slate-50 rounded-lg overflow-hidden h-32 flex justify-center items-center">
-                                <canvas id="canvas-inspector" class="absolute top-0 left-0 w-full h-full cursor-crosshair"></canvas>
-                                <span class="text-[11px] text-slate-300 pointer-events-none select-none">터치 또는 마우스로 서명하세요</span>
-                            </div>
-                        </div>
-
-                        <!-- Manager Signature -->
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-slate-500 flex justify-between items-center">
-                                <span>현장 대리인 / 관리책임자 서명</span>
-                                <button type="button" onclick="clearSignature('canvas-manager')" class="text-slate-400 hover:text-slate-600 text-[11px] font-semibold no-print">
-                                    <i class="fa-solid fa-eraser"></i> 지우기
-                                </button>
-                            </label>
-                            <div class="relative border border-slate-200 bg-slate-50 rounded-lg overflow-hidden h-32 flex justify-center items-center">
-                                <canvas id="canvas-manager" class="absolute top-0 left-0 w-full h-full cursor-crosshair"></canvas>
-                                <span class="text-[11px] text-slate-300 pointer-events-none select-none">터치 또는 마우스로 서명하세요</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                <button type="button" onclick="openLogModal()" class="no-print bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-plus text-sm"></i> 작업자 등록
+                </button>
             </div>
 
-        </div>
-
-        <!-- PRINT EXCLUSIVE SYSTEM PREVIEW FORM (Hidden during screen view, shows on print) -->
-        <div class="hidden print-page-break print-layout mt-12 bg-white p-8 border border-slate-300" id="print-official-doc">
-            <h1 class="text-center text-3xl font-black underline mb-6">스마트 안전점검 체크리스트 종합 보고서</h1>
-            
-            <table class="w-full border-collapse border border-slate-800 text-sm mb-6">
-                <tbody>
-                    <tr>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold w-1/6 text-center">공사명</td>
-                        <td colspan="3" class="border border-slate-800 p-2 font-medium" id="print-p-site"></td>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold w-1/6 text-center">점검일자</td>
-                        <td class="border border-slate-800 p-2 font-medium" id="print-p-date"></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold text-center">점검자</td>
-                        <td class="border border-slate-800 p-2 font-medium" id="print-p-inspector"></td>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold text-center">소장/책임자</td>
-                        <td class="border border-slate-800 p-2 font-medium" id="print-p-manager"></td>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold text-center">구역/위치</td>
-                        <td class="border border-slate-800 p-2 font-medium" id="print-p-zone"></td>
-                    </tr>
-                    <tr>
-                        <td class="border border-slate-800 bg-slate-100 p-2 font-bold text-center">점검결과 요약</td>
-                        <td colspan="5" class="border border-slate-800 p-2 text-xs">
-                            - <b>점검 진행률:</b> <span id="print-p-prog"></span> | 
-                            - <b>적합 판정:</b> <span id="print-p-pass"></span>건 | 
-                            - <b>부적합(시정조치 필요):</b> <span id="print-p-fail" class="text-red-600 font-bold"></span>건
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <p class="text-xs text-slate-500 mb-2">※ 본 문서는 안전보건 관리 시스템을 통하여 점검하고 전자서명을 취득한 공인 안전 보고서입니다.</p>
-        </div>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 py-6 mt-12 border-t border-slate-800 no-print">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
-            <p class="text-xs">
-                산업안전보건법 제36조(위험성평가 등) 및 안전점검 규칙에 근거한 스마트 건설안전 모니터링 시스템입니다.
-            </p>
-            <div class="flex justify-center gap-6 text-sm">
-                <a href="#" class="hover:text-white transition-all"><i class="fa-solid fa-shield-halved text-safety-500 mr-1"></i>안전보건공단 지침</a>
-                <a href="#" class="hover:text-white transition-all"><i class="fa-solid fa-book-open text-safety-500 mr-1"></i>사용 가이드</a>
-                <a href="#" class="hover:text-white transition-all"><i class="fa-solid fa-circle-question text-safety-500 mr-1"></i>긴급 지원 센터</a>
+            <!-- 등록된 조치 기록 테이블 -->
+            <div class="overflow-x-auto border border-slate-100 rounded-xl">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-600">
+                            <th class="px-4 py-3.5">성명</th>
+                            <th class="px-4 py-3.5">소속 / 공종</th>
+                            <th class="px-4 py-3.5">발견된 이상 상태</th>
+                            <th class="px-4 py-3.5">실행 조치 내용</th>
+                            <th class="px-4 py-3.5 text-center">조치 현황</th>
+                            <th class="px-4 py-3.5 text-center no-print">작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="worker-log-tbody" class="divide-y divide-slate-100 text-sm">
+                        <!-- Dynamic Rows loaded by Javascript -->
+                        <tr id="empty-row">
+                            <td colspan="6" class="px-4 py-12 text-center text-slate-400">
+                                <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
+                                오늘 발견 및 조치된 특이 사항이 없습니다.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <p class="text-[10px] text-slate-600">
-                &copy; 2026 Smart Safety Inc. All rights reserved. Registered for Construction Safety Enhancement Campaign.
-            </p>
+        </section>
+
+        <!-- 안전 관리자용 가이드 라인 팁 -->
+        <section class="bg-amber-50/50 rounded-2xl border border-amber-200/50 p-5 sm:p-6 no-print">
+            <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-circle-info text-amber-600"></i>
+                안전 관리자를 위한 TBM 심리학 가이드 (Tips)
+            </h3>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-amber-800 leading-relaxed">
+                <li class="flex gap-2">
+                    <span class="text-amber-600 font-bold shrink-0">1. 눈 마주치며 인사하기:</span>
+                    <span>형식적인 외침 대신 모든 근로자의 눈을 2~3초 간 직접 마주치며 소통하세요. 눈동자의 힘과 표정 변화만으로도 집중력과 수면 상태를 80% 이상 파악할 수 있습니다.</span>
+                </li>
+                <li class="flex gap-2">
+                    <span class="text-amber-600 font-bold shrink-0">2. 구체적인 지적 확인:</span>
+                    <span>"오늘 안전고리는 어느 지점에 체결해야 하죠?"와 같이 돌발 질문을 던져 근로자의 지각을 일깨우고 기계적인 수락적 답변 방지를 유도하세요.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 작업 수행 바 -->
+        <div class="flex flex-wrap justify-end gap-3 no-print pt-4 border-t border-slate-200">
+            <button onclick="resetCurrentForm()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold px-5 py-3 rounded-xl transition shadow-sm flex items-center gap-2">
+                <i class="fa-solid fa-arrow-rotate-right text-slate-400"></i> 새 기록 작성
+            </button>
+            <button onclick="saveChecklist()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> 브라우저 저장
+            </button>
+            <button onclick="exportAndPrint()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-print"></i> 보고서 인쇄 / PDF 저장
+            </button>
         </div>
-    </footer>
 
-    <!-- SYSTEM BUSINESS LOGIC JAVASCRIPT -->
-    <script>
-        // --- 1. CORE DATA DEFINE (KOSHA CONSTRUCTION CHECKLIST MODEL) ---
-        const CHECKLIST_TEMPLATES = {
-            "personal": {
-                id: "personal",
-                title: "개인보호구",
-                icon: "fa-user-shield",
-                badge: "PPE",
-                questions: [
-                    { id: "Q1", text: "모든 근로자가 현장 진입 시 안전모 및 안전화를 정확하게 착용하고 있습니까?", desc: "안전모 턱끈 조임, 찌그러짐 유무 확인 필수" },
-                    { id: "Q2", text: "2미터 이상 고소 작업 구역의 근로자가 안전대를 안전하게 체결하여 작업 중입니까?", desc: "체결 고리의 결합부 강도 확인" },
-                    { id: "Q3", text: "분진, 밀폐구역 및 특수 유해 물질 작업자에게 방독/방진마스크, 안면부 보호구가 지급 및 착용되었습니까?", desc: "용접 보안경, 소음 귀마개 포함" }
-                ]
-            },
-            "fall": {
-                id: "fall",
-                title: "추락·낙하 예방",
-                icon: "fa-person-falling",
-                badge: "FALL",
-                questions: [
-                    { id: "Q4", text: "임시 비계(Scaffold)상의 보행 발판 및 고정 클램프 부품이 느슨함 없이 단단하게 고정되어 있습니까?", desc: "발판 틈새 3cm 미만 유지" },
-                    { id: "Q5", text: "엘리베이터 피트, 환기구, 바닥 개구부 등에 임시 덮개 및 위험 유도 표지판이 정상 배치되었습니까?", desc: "덮개 이탈 방지 조치 및 안전난간 필수" },
-                    { id: "Q6", text: "낙하 위험 구역에 안전 방망(안전망)과 방호 선반이 규정 각도에 부합되게 가설되었습니까?", desc: "추락 방호망 설치 기준 확인" }
-                ]
-            },
-            "fire_elec": {
-                id: "fire_elec",
-                title: "화재·전기 안전",
-                icon: "fa-fire-extinguisher",
-                badge: "FIRE/ELEC",
-                questions: [
-                    { id: "Q7", text: "용접, 가스절단 등의 화기 작업 장소 주변에 휴대용 소화기 배치와 불티방지포가 설치되었습니까?", desc: "화재감시원 배치 의무 준수 여부" },
-                    { id: "Q8", text: "임시 가설 배전반 마다 전기 누전차단기(ELB)의 정상 작동 여부 및 방우 하우징 커버가 설치되었습니까?", desc: "접지단자 연결 및 보호관 삽입 상태" },
-                    { id: "Q9", text: "전선 케이블이 바닥에 방치되어 중장비 이동 시 밟힐 우려가 없도록 상부 가선 조치가 되어있습니까?", desc: "케이블 타이 등을 이용한 공중 배치 확인" }
-                ]
-            },
-            "machinery": {
-                id: "machinery",
-                title: "건설기계·장비",
-                icon: "fa-truck-monster",
-                badge: "EQUIP",
-                questions: [
-                    { id: "Q10", text: "크레인, 굴착기 등 주요 중장비 진입 작업 시 신호수가 정위치에 배치되어 조율하고 있습니까?", desc: "무전기 소지 및 안전 수화 동작 일치" },
-                    { id: "Q11", text: "기계 장비의 침하 및 전도를 방지하기 위해 아웃트리거(Outrigger) 및 침하 방지판이 완벽하게 가설되었습니까?", desc: "연약지반 시 보강조치 점검" },
-                    { id: "Q12", text: "건설 기계 작동 전, 사전 작업계획서가 수립되어 현장 내 유관원들이 해당 내용을 인지하고 있습니까?", desc: "장비별 일일 점검표 확인" }
-                ]
-            },
-            "emergency": {
-                id: "emergency",
-                title: "비상대응·보건",
-                icon: "fa-truck-medical",
-                badge: "EMERG",
-                questions: [
-                    { id: "Q13", text: "현장 내 비상 연락망, 비상 대피 통로 표지판이 근로자가 상시 볼 수 있는 장소에 게시되었습니까?", desc: "비상 소집 구역 인지 여부 포함" },
-                    { id: "Q14", text: "구급함 약품이 만료 없이 확보되어 있고 혹서기/혹한기 쉼터 및 충분한 음용수가 무상 구비되어 있습니까?", desc: "수분 보충제 및 온열질환 조치 가용성" },
-                    { id: "Q15", text: "지하층 및 맨홀 등 밀폐공간 진입 전 산소농도 계측기로 산소 결핍 유무를 조사하고 강제 환기설비를 켰습니까?", desc: "가스 검지기 센서 가동 및 대피 장비 확인" }
-                ]
-            }
-        };
+    </div>
 
-        // APPLICATION REAL-TIME STATE
-        let activeTab = "personal";
-        let responses = {}; // Key: Question ID, Value: 'PASS' | 'FAIL' | 'NA'
-        let actionItems = {}; // Key: Question ID, Value: { text, priority, PIC, status: 'pending'|'resolved' }
+    <!-- 과거 이력 탭 -->
+    <div id="tab-history" class="hidden space-y-6">
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6">
+            <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-indigo-500 rounded-full"></span>
+                    <h2 class="text-base sm:text-lg font-bold text-slate-900">과거 TBM 체크리스트 저장 기록</h2>
+                </div>
+                <button onclick="clearAllData()" class="text-rose-600 hover:text-rose-800 text-xs font-semibold px-3 py-1.5 hover:bg-rose-50 rounded-lg transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> 전체 기록 삭제
+                </button>
+            </div>
 
-        // --- 2. INITIALIZATION ON WINDOW LOAD ---
-        window.onload = function() {
-            // Setup real-time dynamic date
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inspection-date').value = today;
-            document.getElementById('header-time').innerText = today;
+            <!-- 저장 목록 리스트 -->
+            <div class="space-y-4" id="history-container">
+                <!-- Javascript will load the list here -->
+                <div class="text-center py-12 text-slate-400">
+                    <i class="fa-regular fa-folder-closed text-4xl mb-3 block text-slate-300"></i>
+                    저장된 과거 이력이 존재하지 않습니다.
+                </div>
+            </div>
+        </section>
+    </div>
 
-            // Load saved checklist state or defaults
-            initializeState();
-            renderCategoryTabs();
-            renderChecklist();
-            renderActionItems();
-            updateAllMetrics();
+</main>
 
-            // Set up Interactive electronic signature canvas
-            initSignatures();
-        };
+<!-- 이상 징후 근로자 등록 Modal (Alert 대용) -->
+<div id="log-modal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 no-print">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden transform scale-95 transition-all duration-300" id="log-modal-content">
+        <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
+            <h3 class="font-bold flex items-center gap-2 text-sm sm:text-base">
+                <i class="fa-solid fa-user-plus text-amber-500"></i>
+                이상 상태 근로자 조치 등록
+            </h3>
+            <button onclick="closeLogModal()" class="text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">근로자명</label>
+                    <input type="text" id="modal-worker-name" placeholder="예: 홍길동" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">소속 / 공종</label>
+                    <input type="text" id="modal-worker-role" placeholder="예: 철근공" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1">관찰된 이상 징후</label>
+                <input type="text" id="modal-worker-symptom" placeholder="예: 극심한 수면부족 호소, 충혈이 심함" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1">현장 조치 사항</label>
+                <textarea id="modal-worker-action" rows="2" placeholder="예: 당일 고소작업에서 제외하고 지상층 정리작업 및 멘토 밀착마크 전환" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition resize-none"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-2">조치 처리 완료 여부</label>
+                <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer text-sm">
+                        <input type="radio" name="modal-worker-status" value="monitoring" checked class="w-4 h-4 border-slate-300 text-amber-500 focus:ring-amber-500">
+                        <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-hourglass-half mr-1"></i>관찰 및 피드백</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer text-sm">
+                        <input type="radio" name="modal-worker-status" value="completed" class="w-4 h-4 border-slate-300 text-emerald-500 focus:ring-emerald-500">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-check-double mr-1"></i>조치 완료 후 투입</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="bg-slate-50 px-6 py-4 flex justify-end gap-2 border-t border-slate-100">
+            <button onclick="closeLogModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 transition">취소</button>
+            <button onclick="addWorkerLog()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">추가 등록</button>
+        </div>
+    </div>
+</div>
 
-        // Setup default state values in memory
-        function initializeState() {
-            Object.keys(CHECKLIST_TEMPLATES).forEach(catId => {
-                CHECKLIST_TEMPLATES[catId].questions.forEach(q => {
-                    responses[q.id] = null; // Unchecked by default
-                });
-            });
-            
-            // Sync form variables with LocalStorage if any exist
-            const cached = localStorage.getItem('last_safety_report_data');
-            if (cached) {
-                try {
-                    const parsed = JSON.parse(cached);
-                    document.getElementById('site-name').value = parsed.siteName || '';
-                    document.getElementById('inspector-name').value = parsed.inspectorName || '';
-                    document.getElementById('manager-name').value = parsed.managerName || '';
-                    document.getElementById('inspection-zone').value = parsed.inspectionZone || '';
-                    document.getElementById('inspection-type').value = parsed.inspectionType || '정기';
-                    
-                    if (parsed.responses) responses = parsed.responses;
-                    if (parsed.actionItems) actionItems = parsed.actionItems;
-                } catch (e) {
-                    console.error("Cache parsing error, falling back to empty state", e);
-                }
-            }
-        }
+<!-- Custom Toast Notification System (Alert 대용) -->
+<div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 no-print"></div>
 
-        // --- 3. RENDERING INTERACTION INTERFACES ---
+<!-- Custom Confirmation Modal (Confirm 대용) -->
+<div id="confirm-modal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 no-print">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden transform scale-95 transition-all duration-300" id="confirm-modal-content">
+        <div class="p-6">
+            <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 text-xl mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 mb-2 text-sm sm:text-base" id="confirm-title">확인 필요</h4>
+            <p class="text-xs text-slate-500 leading-relaxed" id="confirm-message">이 작업을 계속하시겠습니까?</p>
+        </div>
+        <div class="bg-slate-50 px-6 py-3 flex justify-end gap-2 border-t border-slate-100">
+            <button id="confirm-cancel-btn" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 transition">취소</button>
+            <button id="confirm-success-btn" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">수행</button>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-slate-100 border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12 no-print">
+    <div class="max-w-7xl mx-auto px-4">
+        <p class="font-medium">ⓒ 2026 TBM Human Factors & Safety System. All rights reserved.</p>
+        <p class="text-[10px] text-slate-400 mt-1">현장 재해 감축을 위한 휴먼 에러 모니터링 체크리스트 시스템</p>
+    </div>
+</footer>
+
+<script>
+    // State management
+    let state = {
+        activeTab: 'dashboard',
+        logs: [], // Current day's worker anomaly logs
+        savedRecords: [] // Entire history stored in LocalStorage
+    };
+
+    // Initialize Page
+    window.onload = function() {
+        // Set date input dynamically to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tbm-date').value = today;
+
+        // Initialize clock
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Load data from localStorage
+        loadAllDataFromStorage();
+
+        // Render current state
+        renderWorkerLogs();
+        renderHistoryList();
+    };
+
+    // Live clock update
+    function updateClock() {
+        const now = new Date();
+        const str = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }) + ' ' + now.toLocaleTimeString('ko-KR');
+        document.getElementById('live-clock').innerText = str;
+    }
+
+    // Tab Switching Logic
+    function switchTab(tabId) {
+        state.activeTab = tabId;
         
-        // Render Top Category Tabs
-        function renderCategoryTabs() {
-            const tabsContainer = document.getElementById('category-tabs');
-            tabsContainer.innerHTML = '';
-
-            Object.keys(CHECKLIST_TEMPLATES).forEach(key => {
-                const category = CHECKLIST_TEMPLATES[key];
-                
-                // Count status of this category for mini indicators
-                let total = category.questions.length;
-                let checked = 0;
-                category.questions.forEach(q => {
-                    if (responses[q.id] !== null) checked++;
-                });
-
-                const isSelected = activeTab === key;
-                const activeClasses = isSelected 
-                    ? "bg-white text-slate-900 shadow-sm" 
-                    : "text-slate-400 hover:text-white hover:bg-slate-800";
-
-                const tabButtonHTML = `
-                    <button onclick="switchTab('${key}')" class="px-3.5 py-2.5 rounded-t-xl text-xs md:text-sm font-bold flex items-center space-x-2 transition-all ${activeClasses}">
-                        <i class="fa-solid ${category.icon} ${isSelected ? 'text-safety-500' : 'text-slate-500'}"></i>
-                        <span>${category.title}</span>
-                        <span class="ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${isSelected ? 'bg-slate-900 text-white' : 'bg-slate-800 text-slate-400'}">
-                            ${checked}/${total}
-                        </span>
-                    </button>
-                `;
-                tabsContainer.insertAdjacentHTML('beforeend', tabButtonHTML);
-            });
-        }
-
-        // Switch Tab navigation
-        function switchTab(tabId) {
-            activeTab = tabId;
-            renderCategoryTabs();
-            renderChecklist();
-            
-            // Adjust pagination text
-            const keys = Object.keys(CHECKLIST_TEMPLATES);
-            const index = keys.indexOf(tabId);
-            document.getElementById('tab-indicator').innerText = `Page ${index + 1} of ${keys.length}`;
-        }
-
-        // Move Tab sequentially
-        function navigateTab(direction) {
-            const keys = Object.keys(CHECKLIST_TEMPLATES);
-            let index = keys.indexOf(activeTab);
-            index += direction;
-            if (index >= 0 && index < keys.length) {
-                switchTab(keys[index]);
-            }
-        }
-
-        // Render main check item listings
-        function renderChecklist() {
-            const category = CHECKLIST_TEMPLATES[activeTab];
-            
-            // Render Title Info
-            document.getElementById('current-category-title').innerHTML = `
-                <span class="bg-safety-500 text-slate-900 text-xs px-2.5 py-1 rounded-md font-bold">${category.badge}</span>
-                <span class="text-slate-800 font-extrabold text-base md:text-lg">${category.title} 점검 기준</span>
-            `;
-
-            const listContainer = document.getElementById('questions-list-container');
-            listContainer.innerHTML = '';
-
-            category.questions.forEach(q => {
-                const currentVal = responses[q.id];
-                
-                const isPass = currentVal === 'PASS';
-                const isFail = currentVal === 'FAIL';
-                const isNa = currentVal === 'NA';
-
-                const cardHTML = `
-                    <div class="p-4 rounded-xl border ${isFail ? 'border-red-200 bg-red-50/20' : 'border-slate-100 bg-white'} hover:shadow-md transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div class="space-y-1 max-w-xl">
-                            <div class="flex items-center gap-2">
-                                <span class="bg-slate-100 text-slate-600 text-[10px] font-mono px-1.5 py-0.5 rounded font-bold">${q.id}</span>
-                                <h3 class="font-bold text-slate-800 text-sm md:text-base">${q.text}</h3>
-                            </div>
-                            <p class="text-xs text-slate-400 pl-8 font-medium">${q.desc}</p>
-                        </div>
-
-                        <!-- Safety Interactive Buttons -->
-                        <div class="flex items-center gap-1.5 self-end md:self-center no-print">
-                            <button onclick="setResponse('${q.id}', 'PASS')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${isPass ? 'bg-emerald-500 text-white shadow-sm' : 'bg-slate-100 hover:bg-emerald-50 text-slate-600'}">
-                                <i class="fa-solid fa-circle-check"></i> 적합
-                            </button>
-                            <button onclick="setResponse('${q.id}', 'FAIL')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${isFail ? 'bg-red-500 text-white shadow-sm' : 'bg-slate-100 hover:bg-red-50 text-slate-600'}">
-                                <i class="fa-solid fa-triangle-exclamation"></i> 부적합
-                            </button>
-                            <button onclick="setResponse('${q.id}', 'NA')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${isNa ? 'bg-slate-600 text-white shadow-sm' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}">
-                                <i class="fa-solid fa-circle-minus"></i> 해당없음
-                            </button>
-                        </div>
-                    </div>
-                `;
-                listContainer.insertAdjacentHTML('beforeend', cardHTML);
-            });
-        }
-
-        // Set state for a checklist option selected
-        function setResponse(qId, status) {
-            responses[qId] = status;
-
-            // Manage Action Items automatically if marked FAIL
-            if (status === 'FAIL') {
-                if (!actionItems[qId]) {
-                    // Pull detailed question text
-                    let fullText = "";
-                    Object.keys(CHECKLIST_TEMPLATES).forEach(catId => {
-                        const matched = CHECKLIST_TEMPLATES[catId].questions.find(x => x.id === qId);
-                        if (matched) fullText = matched.text;
-                    });
-                    
-                    // Create newly logged Action Defect
-                    actionItems[qId] = {
-                        text: fullText,
-                        priority: 'high',
-                        PIC: '',
-                        status: 'pending'
-                    };
-                }
+        const tabs = ['dashboard', 'history'];
+        tabs.forEach(t => {
+            const tabEl = document.getElementById(`tab-${t}`);
+            const btnEl = document.getElementById(`tab-btn-${t}`);
+            if (t === tabId) {
+                tabEl.classList.remove('hidden');
+                btnEl.className = "px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-white border border-slate-700 transition shadow-inner";
             } else {
-                // Remove from Action list if switched to PASS or NA
-                if (actionItems[qId]) {
-                    delete actionItems[qId];
-                }
+                tabEl.classList.add('hidden');
+                btnEl.className = "px-4 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition";
             }
+        });
 
-            renderChecklist();
-            renderCategoryTabs();
-            renderActionItems();
-            updateAllMetrics();
-            autoCacheData();
+        if(tabId === 'history') {
+            renderHistoryList();
         }
+    }
 
-        // Quick mass marker
-        function markAllCategory(status) {
-            const category = CHECKLIST_TEMPLATES[activeTab];
-            category.questions.forEach(q => {
-                setResponse(q.id, status);
-            });
-        }
+    // Modal Operations
+    function openLogModal() {
+        const modal = document.getElementById('log-modal');
+        const content = document.getElementById('log-modal-content');
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+    }
 
-        // --- 4. STREAMING_CHUNK: Managing Deficiencies action items & storage ---
-        // Render Defect Action Items Dynamic Table
-        function renderActionItems() {
-            const tableBody = document.getElementById('action-items-body');
-            const placeholder = document.getElementById('no-fails-placeholder');
-            const countBadge = document.getElementById('fail-tracker-badge');
+    function closeLogModal() {
+        const modal = document.getElementById('log-modal');
+        const content = document.getElementById('log-modal-content');
+        modal.classList.add('pointer-events-none', 'opacity-0');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-95');
+        // Clear modal form
+        document.getElementById('modal-worker-name').value = '';
+        document.getElementById('modal-worker-role').value = '';
+        document.getElementById('modal-worker-symptom').value = '';
+        document.getElementById('modal-worker-action').value = '';
+    }
 
-            tableBody.innerHTML = '';
-            const defectIds = Object.keys(actionItems);
+    // Custom Dialog for Confirmation
+    function customConfirm(title, message, onConfirm) {
+        const modal = document.getElementById('confirm-modal');
+        const content = document.getElementById('confirm-modal-content');
+        document.getElementById('confirm-title').innerText = title;
+        document.getElementById('confirm-message').innerText = message;
+        
+        modal.classList.remove('pointer-events-none', 'opacity-0');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
 
-            if (defectIds.length === 0) {
-                placeholder.classList.remove('hidden');
-                countBadge.innerText = `조치 대상: 0건`;
-                countBadge.className = "bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full border border-slate-200";
-                return;
-            }
+        const successBtn = document.getElementById('confirm-success-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
 
-            placeholder.classList.add('hidden');
-            countBadge.innerText = `조치 대상: ${defectIds.length}건`;
-            countBadge.className = "bg-red-50 text-red-600 text-xs font-bold px-3 py-1 rounded-full border border-red-100 animate-bounce";
-
-            defectIds.forEach((qId, idx) => {
-                const item = actionItems[qId];
-                const isResolved = item.status === 'resolved';
-
-                const rowHTML = `
-                    <tr class="hover:bg-slate-50/50 transition-all ${isResolved ? 'bg-slate-50 text-slate-400 line-through' : ''}">
-                        <td class="py-3 px-2 font-mono font-bold text-slate-500">${qId}</td>
-                        <td class="py-3 px-2">
-                            <div class="font-medium text-slate-800 ${isResolved ? 'text-slate-400' : ''}">${item.text}</div>
-                        </td>
-                        <td class="py-3 px-2">
-                            <select onchange="updateActionItem('${qId}', 'priority', this.value)" class="bg-white border border-slate-200 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-red-400 no-print" ${isResolved ? 'disabled' : ''}>
-                                <option value="critical" ${item.priority === 'critical' ? 'selected' : ''}>?? 즉각중지 (즉시)</option>
-                                <option value="high" ${item.priority === 'high' ? 'selected' : ''}>? 긴급조치 (24h)</option>
-                                <option value="normal" ${item.priority === 'normal' ? 'selected' : ''}>??? 일반정비 (3일내)</option>
-                            </select>
-                            <span class="hidden print-status-th font-bold">
-                                ${item.priority === 'critical' ? '즉시 중지' : item.priority === 'high' ? '24시간 내' : '3일 내'}
-                            </span>
-                        </td>
-                        <td class="py-3 px-2">
-                            <input type="text" value="${item.PIC}" onchange="updateActionItem('${qId}', 'PIC', this.value)" placeholder="예: 시공A팀 김반장" class="bg-white border border-slate-200 rounded px-2 py-1 text-xs w-full focus:outline-none focus:ring-1 focus:ring-red-400 no-print" ${isResolved ? 'disabled' : ''}>
-                            <span class="hidden print-status-th font-bold">${item.PIC || '지정되지 않음'}</span>
-                        </td>
-                        <td class="py-3 px-2 no-print">
-                            <button onclick="toggleActionResolve('${qId}')" class="px-2.5 py-1 rounded text-xs font-extrabold transition-all flex items-center gap-1 ${isResolved ? 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' : 'bg-amber-100 text-amber-700 hover:bg-amber-200'}">
-                                ${isResolved ? '<i class="fa-solid fa-lock"></i> 해결됨' : '<i class="fa-solid fa-clock"></i> 조치 대기'}
-                            </button>
-                        </td>
-                        <td class="py-3 px-2 hidden print-status-th font-bold text-xs">
-                            [ ${isResolved ? '조치 완료' : '미해결 상태'} ]
-                        </td>
-                    </tr>
-                `;
-                tableBody.insertAdjacentHTML('beforeend', rowHTML);
-            });
-        }
-
-        function updateActionItem(qId, field, value) {
-            if (actionItems[qId]) {
-                actionItems[qId][field] = value;
-                autoCacheData();
-            }
-        }
-
-        function toggleActionResolve(qId) {
-            if (actionItems[qId]) {
-                actionItems[qId].status = actionItems[qId].status === 'resolved' ? 'pending' : 'resolved';
-                renderActionItems();
-                updateAllMetrics();
-                autoCacheData();
-            }
-        }
-
-        // --- 5. STREAMING_CHUNK: Computing dynamic safety grades and metrics ---
-        // Recalculate Dashboard Metric Percentages
-        function updateAllMetrics() {
-            let totalQuestionsCount = 0;
-            let checkedCount = 0;
-            let passCount = 0;
-            let failCount = 0;
-
-            Object.keys(CHECKLIST_TEMPLATES).forEach(catId => {
-                CHECKLIST_TEMPLATES[catId].questions.forEach(q => {
-                    totalQuestionsCount++;
-                    const val = responses[q.id];
-                    if (val !== null) {
-                        checkedCount++;
-                        if (val === 'PASS') passCount++;
-                        if (val === 'FAIL') failCount++;
-                    }
-                });
-            });
-
-            // Update Progress Percentage
-            const progressPercent = totalQuestionsCount > 0 ? Math.round((checkedCount / totalQuestionsCount) * 100) : 0;
-            document.getElementById('metric-progress').innerText = `${progressPercent}%`;
-            document.getElementById('metric-progress-fraction').innerText = `${checkedCount}/${totalQuestionsCount}`;
-            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-
-            // Update Pass & Fail Counters
-            document.getElementById('metric-pass').innerText = `${passCount} 건`;
-            document.getElementById('metric-fail').innerText = `${failCount} 건`;
-
-            // Calculate Remaining Pending Actions
-            const totalFails = Object.keys(actionItems).length;
-            const resolvedFails = Object.values(actionItems).filter(item => item.status === 'resolved').length;
-            const pendingFails = totalFails - resolvedFails;
-
-            let pendingPercent = 0;
-            if (totalFails > 0) {
-                pendingPercent = Math.round((pendingFails / totalFails) * 100);
-            }
-            document.getElementById('metric-pending').innerText = `${pendingPercent}%`;
-            document.getElementById('metric-pending-fraction').innerText = `부적합 ${totalFails}건 중 ${pendingFails}건 미해결`;
-        }
-
-        // Local Storage Syncing
-        function autoCacheData() {
-            const currentDoc = {
-                siteName: document.getElementById('site-name').value,
-                inspectorName: document.getElementById('inspector-name').value,
-                managerName: document.getElementById('manager-name').value,
-                inspectionZone: document.getElementById('inspection-zone').value,
-                inspectionType: document.getElementById('inspection-type').value,
-                responses: responses,
-                actionItems: actionItems
-            };
-            localStorage.setItem('last_safety_report_data', JSON.stringify(currentDoc));
-        }
-
-        // --- 6. STREAMING_CHUNK: Handling signature pads and Canvas elements ---
-        // Setup signature drawing canvas for inspectors and managers
-        let signaturePads = {};
-
-        function initSignatures() {
-            const canvases = ['canvas-inspector', 'canvas-manager'];
-            canvases.forEach(id => {
-                const canvas = document.getElementById(id);
-                const ctx = canvas.getContext('2d');
-                
-                // Adjust Canvas resolution for retina displays
-                const ratio = window.devicePixelRatio || 1;
-                canvas.width = canvas.parentElement.clientWidth * ratio;
-                canvas.height = canvas.parentElement.clientHeight * ratio;
-                ctx.scale(ratio, ratio);
-
-                let isDrawing = false;
-                let lastX = 0;
-                let lastY = 0;
-
-                // Event Listeners for both mouse and mobile touches
-                function getPos(e) {
-                    const rect = canvas.getBoundingClientRect();
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    return {
-                        x: clientX - rect.left,
-                        y: clientY - rect.top
-                    };
-                }
-
-                function startDraw(e) {
-                    isDrawing = true;
-                    const pos = getPos(e);
-                    lastX = pos.x;
-                    lastY = pos.y;
-                    // Remove placeholder background text on touch
-                    const placeholder = canvas.nextElementSibling;
-                    if (placeholder) placeholder.style.display = 'none';
-                }
-
-                function draw(e) {
-                    if (!isDrawing) return;
-                    e.preventDefault();
-                    const pos = getPos(e);
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(lastX, lastY);
-                    ctx.lineTo(pos.x, pos.y);
-                    ctx.strokeStyle = '#0f172a'; // Deep slate dark blue for realistic ink
-                    ctx.lineWidth = 2.5;
-                    ctx.lineCap = 'round';
-                    ctx.stroke();
-                    
-                    lastX = pos.x;
-                    lastY = pos.y;
-                }
-
-                function stopDraw() {
-                    isDrawing = false;
-                }
-
-                canvas.addEventListener('mousedown', startDraw);
-                canvas.addEventListener('mousemove', draw);
-                canvas.addEventListener('mouseup', stopDraw);
-                canvas.addEventListener('mouseleave', stopDraw);
-
-                canvas.addEventListener('touchstart', startDraw, { passive: false });
-                canvas.addEventListener('touchmove', draw, { passive: false });
-                canvas.addEventListener('touchend', stopDraw);
-
-                signaturePads[id] = { canvas, ctx };
-            });
-
-            // Resizing window handler to prevent canvas stretching
-            window.addEventListener('resize', () => {
-                canvases.forEach(id => {
-                    const pad = signaturePads[id];
-                    if (pad) {
-                        // Backup contents
-                        const backup = pad.canvas.toDataURL();
-                        const oldW = pad.canvas.width;
-                        const oldH = pad.canvas.height;
-                        
-                        pad.canvas.width = pad.canvas.parentElement.clientWidth * (window.devicePixelRatio || 1);
-                        pad.canvas.height = pad.canvas.parentElement.clientHeight * (window.devicePixelRatio || 1);
-                        pad.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
-                        
-                        // Redraw
-                        const img = new Image();
-                        img.onload = function() {
-                            pad.ctx.drawImage(img, 0, 0, pad.canvas.width / (window.devicePixelRatio || 1), pad.canvas.height / (window.devicePixelRatio || 1));
-                        };
-                        img.src = backup;
-                    }
-                });
-            });
-        }
-
-        function clearSignature(id) {
-            const pad = signaturePads[id];
-            if (pad) {
-                pad.ctx.clearRect(0, 0, pad.canvas.width, pad.canvas.height);
-                // Re-show placeholder label
-                const placeholder = pad.canvas.nextElementSibling;
-                if (placeholder) placeholder.style.display = 'block';
-            }
-        }
-
-        // --- 7. STREAMING_CHUNK: Report output and saving system... ---
-        // Save current inspection locally
-        function saveInspection() {
-            const siteName = document.getElementById('site-name').value.trim();
-            const inspector = document.getElementById('inspector-name').value.trim();
-            
-            if (!siteName || !inspector) {
-                alert("?? 공사명과 점검자는 리포트 작성을 위한 필수 입력 사항입니다!");
-                return;
-            }
-
-            const currentReport = {
-                id: 'report_' + Date.now(),
-                siteName: siteName,
-                inspectorName: inspector,
-                managerName: document.getElementById('manager-name').value,
-                inspectionDate: document.getElementById('inspection-date').value,
-                inspectionZone: document.getElementById('inspection-zone').value,
-                inspectionType: document.getElementById('inspection-type').value,
-                responses: { ...responses },
-                actionItems: { ...actionItems }
-            };
-
-            // Retrieve history or init array
-            let historyList = [];
-            const existingHistory = localStorage.getItem('safety_inspections_history');
-            if (existingHistory) {
-                historyList = JSON.parse(existingHistory);
-            }
-
-            // Push newest record on top
-            historyList.unshift(currentReport);
-            // Limit store count to last 20 records
-            if (historyList.length > 20) historyList.pop();
-
-            localStorage.setItem('safety_inspections_history', JSON.stringify(historyList));
-            
-            alert(`?? [${siteName}] 건에 대한 점검 리포트가 성공적으로 저장되었습니다.`);
-            loadHistoryList();
-        }
-
-        // Fetch safety history list
-        function loadHistoryList() {
-            const historyContainer = document.getElementById('history-container');
-            const cachedHistory = localStorage.getItem('safety_inspections_history');
-            
-            if (!cachedHistory) {
-                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">저장된 점검 기록이 없습니다.</p>`;
-                return;
-            }
-
-            const list = JSON.parse(cachedHistory);
-            if (list.length === 0) {
-                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">저장된 점검 기록이 없습니다.</p>`;
-                return;
-            }
-
-            historyContainer.innerHTML = '';
-            list.forEach(report => {
-                const countFails = Object.keys(report.actionItems || {}).length;
-                
-                const cardHTML = `
-                    <div class="p-3 bg-slate-50 border border-slate-100 hover:border-slate-200 rounded-lg flex justify-between items-center transition-all">
-                        <div class="space-y-0.5">
-                            <div class="font-bold text-xs text-slate-700 truncate max-w-[150px]">${report.siteName}</div>
-                            <div class="text-[10px] text-slate-400 font-mono">${report.inspectionDate} | ${report.inspectorName}</div>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="px-2 py-0.5 text-[9px] font-bold rounded ${countFails > 0 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">
-                                부적합: ${countFails}
-                            </span>
-                            <button onclick="loadReportFromHistory('${report.id}')" class="p-1 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 rounded text-[10px] font-bold">
-                                로드
-                            </button>
-                        </div>
-                    </div>
-                `;
-                historyContainer.insertAdjacentHTML('beforeend', cardHTML);
-            });
-        }
-
-        // Load details from historical record back into active workspace
-        function loadReportFromHistory(reportId) {
-            const cachedHistory = localStorage.getItem('safety_inspections_history');
-            if (!cachedHistory) return;
-
-            const list = JSON.parse(cachedHistory);
-            const report = list.find(r => r.id === reportId);
-            if (!report) return;
-
-            if (confirm("?? 현재 작업 중인 내용을 덮어쓰고 과거 기록을 활성화하겠습니까?")) {
-                document.getElementById('site-name').value = report.siteName || '';
-                document.getElementById('inspector-name').value = report.inspectorName || '';
-                document.getElementById('manager-name').value = report.managerName || '';
-                document.getElementById('inspection-date').value = report.inspectionDate || '';
-                document.getElementById('inspection-zone').value = report.inspectionZone || '';
-                document.getElementById('inspection-type').value = report.inspectionType || '정기';
-
-                responses = report.responses || {};
-                actionItems = report.actionItems || {};
-
-                renderCategoryTabs();
-                renderChecklist();
-                renderActionItems();
-                updateAllMetrics();
-                
-                // Alert confirmation
-                alert(`?? [${report.siteName}] 안전보고서 데이터가 활성화되었습니다.`);
-            }
-        }
-
-        // Reset system form completely
-        function resetWholeForm() {
-            if (confirm("정말 전체 양식을 공란으로 리셋하시겠습니까? (이력 내역은 보존됩니다)")) {
-                localStorage.removeItem('last_safety_report_data');
-                document.getElementById('site-name').value = '';
-                document.getElementById('inspector-name').value = '';
-                document.getElementById('manager-name').value = '';
-                document.getElementById('inspection-zone').value = '';
-                
-                // Clear state
-                initializeState();
-                renderCategoryTabs();
-                renderChecklist();
-                renderActionItems();
-                updateAllMetrics();
-                
-                clearSignature('canvas-inspector');
-                clearSignature('canvas-manager');
-            }
-        }
-
-        // --- 8. DYNAMIC PRINT PRE-PROCESSOR ---
-        window.onbeforeprint = function() {
-            // Update the formal printable layout table with real data
-            document.getElementById('print-p-site').innerText = document.getElementById('site-name').value || '(공사명 미입력)';
-            document.getElementById('print-p-date').innerText = document.getElementById('inspection-date').value || '';
-            document.getElementById('print-p-inspector').innerText = document.getElementById('inspector-name').value || '';
-            document.getElementById('print-p-manager').innerText = document.getElementById('manager-name').value || '';
-            document.getElementById('print-p-zone').innerText = document.getElementById('inspection-zone').value || '현장 전체';
-
-            const progress = document.getElementById('metric-progress').innerText;
-            const pass = document.getElementById('metric-pass').innerText;
-            const fail = document.getElementById('metric-fail').innerText;
-
-            document.getElementById('print-p-prog').innerText = progress;
-            document.getElementById('print-p-pass').innerText = pass;
-            document.getElementById('print-p-fail').innerText = fail;
-
-            // Render action item checklist dynamically into official printer list
-            const printedTable = document.querySelector("#print-official-doc tbody");
-            
-            // Clear previous added dynamic print rows
-            const dynamicRows = document.querySelectorAll(".print-dynamic-row");
-            dynamicRows.forEach(row => row.remove());
-
-            // Add checklist categories and selected answers directly to the printed report
-            let printIndex = 1;
-            Object.keys(CHECKLIST_TEMPLATES).forEach(catId => {
-                const category = CHECKLIST_TEMPLATES[catId];
-                
-                // Append category header row
-                const catHeaderRow = document.createElement("tr");
-                catHeaderRow.className = "print-dynamic-row bg-slate-100 text-xs font-bold";
-                catHeaderRow.innerHTML = `
-                    <td colspan="6" class="border border-slate-800 p-1.5">${category.title} 점검 내역</td>
-                `;
-                printedTable.appendChild(catHeaderRow);
-
-                category.questions.forEach(q => {
-                    const statusVal = responses[q.id];
-                    let statusKor = "미점검";
-                    if (statusVal === 'PASS') statusKor = "적합";
-                    if (statusVal === 'FAIL') statusKor = "부적합";
-                    if (statusVal === 'NA') statusKor = "해당없음";
-
-                    const itemRow = document.createElement("tr");
-                    itemRow.className = "print-dynamic-row text-[11px]";
-                    itemRow.innerHTML = `
-                        <td class="border border-slate-800 p-1 text-center font-mono">${printIndex++}</td>
-                        <td colspan="4" class="border border-slate-800 p-1 pl-2">${q.text}</td>
-                        <td class="border border-slate-800 p-1 text-center font-bold ${statusVal === 'FAIL' ? 'text-red-600' : statusVal === 'PASS' ? 'text-emerald-600' : 'text-slate-500'}">
-                            ${statusKor}
-                        </td>
-                    `;
-                    printedTable.appendChild(itemRow);
-                });
-            });
-
-            // Automatically render signature image previews for print view
-            appendPrintSignatures();
+        // Cleanup handlers
+        const cleanup = () => {
+            modal.classList.add('pointer-events-none', 'opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
         };
 
-        function appendPrintSignatures() {
-            // Remove previous signature images if any in print
-            const oldImages = document.querySelectorAll(".print-sig-image-container");
-            oldImages.forEach(el => el.remove());
+        successBtn.onclick = () => {
+            onConfirm();
+            cleanup();
+        };
 
-            const printContainer = document.getElementById('print-official-doc');
-            
-            // Sign off section template
-            const sigContainer = document.createElement("div");
-            sigContainer.className = "print-sig-image-container grid grid-cols-2 gap-8 mt-12 pt-8 border-t border-slate-400";
-            
-            // Get Image Base64 Data URLs from canvases
-            const inspectorDataUrl = signaturePads['canvas-inspector'].canvas.toDataURL();
-            const managerDataUrl = signaturePads['canvas-manager'].canvas.toDataURL();
+        cancelBtn.onclick = () => {
+            cleanup();
+        };
+    }
 
-            sigContainer.innerHTML = `
-                <div class="text-center">
-                    <p class="text-sm font-bold text-slate-700 mb-2">점검자 서명</p>
-                    <div class="inline-block border border-slate-300 rounded p-2 bg-slate-50">
-                        <img src="${inspectorDataUrl}" class="h-20 max-w-xs mx-auto" alt="점검자 서명">
-                    </div>
-                </div>
-                <div class="text-center">
-                    <p class="text-sm font-bold text-slate-700 mb-2">관리 책임자 확인 서명</p>
-                    <div class="inline-block border border-slate-300 rounded p-2 bg-slate-50">
-                        <img src="${managerDataUrl}" class="h-20 max-w-xs mx-auto" alt="소장 서명">
-                    </div>
-                </div>
-            `;
-            printContainer.appendChild(sigContainer);
+    // Toast Messages
+    function showToast(type, text) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        
+        let bg = 'bg-slate-900';
+        let icon = 'fa-circle-info';
+        if(type === 'success') {
+            bg = 'bg-emerald-600';
+            icon = 'fa-circle-check';
+        } else if (type === 'error') {
+            bg = 'bg-rose-600';
+            icon = 'fa-triangle-exclamation';
+        } else if (type === 'warning') {
+            bg = 'bg-amber-600';
+            icon = 'fa-circle-exclamation';
         }
 
-        // Initialize history on start
-        setTimeout(loadHistoryList, 100);
-    </script>
+        toast.className = `${bg} text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transition duration-300 translate-y-2 opacity-0 font-medium`;
+        toast.innerHTML = `<i class="fa-solid ${icon} text-sm"></i> <span>${text}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('translate-y-2', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.add('translate-y-2', 'opacity-0');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    // Add Worker anomaly log to table
+    function addWorkerLog() {
+        const name = document.getElementById('modal-worker-name').value.trim();
+        const role = document.getElementById('modal-worker-role').value.trim();
+        const symptom = document.getElementById('modal-worker-symptom').value.trim();
+        const action = document.getElementById('modal-worker-action').value.trim();
+        const status = document.querySelector('input[name="modal-worker-status"]:checked').value;
+
+        if (!name || !role || !symptom || !action) {
+            showToast('error', '모든 입력란을 작성해 주세요.');
+            return;
+        }
+
+        const newLog = {
+            id: 'worker-' + Date.now(),
+            name: name,
+            role: role,
+            symptom: symptom,
+            action: action,
+            status: status
+        };
+
+        state.logs.push(newLog);
+        renderWorkerLogs();
+        closeLogModal();
+        showToast('success', `${name} 작업자의 상태 로그가 임시 등록되었습니다.`);
+    }
+
+    // Delete Log item
+    function deleteWorkerLog(id) {
+        state.logs = state.logs.filter(log => log.id !== id);
+        renderWorkerLogs();
+        showToast('warning', '작업자 조치 로그가 해제되었습니다.');
+    }
+
+    // Toggle log status in table directly
+    function toggleLogStatus(id) {
+        const log = state.logs.find(l => l.id === id);
+        if(log) {
+            log.status = (log.status === 'completed') ? 'monitoring' : 'completed';
+            renderWorkerLogs();
+            showToast('success', `${log.name} 작업자의 조치 상태가 변경되었습니다.`);
+        }
+    }
+
+    // Render anomaly logs table
+    function renderWorkerLogs() {
+        const tbody = document.getElementById('worker-log-tbody');
+        tbody.innerHTML = '';
+
+        if(state.logs.length === 0) {
+            tbody.innerHTML = `
+                <tr id="empty-row">
+                    <td colspan="6" class="px-4 py-12 text-center text-slate-400">
+                        <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
+                        오늘 발견 및 조치된 특이 사항이 없습니다.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        state.logs.forEach(log => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50/50 transition";
+            
+            const statusBadge = log.status === 'completed' 
+                ? `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold cursor-pointer" onclick="toggleLogStatus('${log.id}')"><i class="fa-solid fa-check mr-1"></i>조치 완료</span>`
+                : `<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-semibold cursor-pointer animate-pulse" onclick="toggleLogStatus('${log.id}')"><i class="fa-solid fa-hourglass-half mr-1"></i>관찰 요망</span>`;
+
+            tr.innerHTML = `
+                <td class="px-4 py-3.5 font-bold text-slate-800">${escapeHtml(log.name)}</td>
+                <td class="px-4 py-3.5 text-slate-600 font-medium">${escapeHtml(log.role)}</td>
+                <td class="px-4 py-3.5 text-rose-600 font-semibold">${escapeHtml(log.symptom)}</td>
+                <td class="px-4 py-3.5 text-slate-600">${escapeHtml(log.action)}</td>
+                <td class="px-4 py-3.5 text-center">${statusBadge}</td>
+                <td class="px-4 py-3.5 text-center no-print">
+                    <button onclick="deleteWorkerLog('${log.id}')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded transition">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Save current state of checklist to browser Storage
+    function saveChecklist() {
+        const date = document.getElementById('tbm-date').value;
+        const zone = document.getElementById('tbm-zone').value.trim();
+        const inspector = document.getElementById('tbm-inspector').value.trim();
+
+        if(!zone || !inspector) {
+            showToast('error', '기본 정보(점검구역, 점검자)를 입력해야 이력 저장이 가능합니다.');
+            return;
+        }
+
+        // Capture checkbox states
+        const checklistItems = {};
+        for (let i = 1; i <= 4; i++) {
+            for (let j = 1; j <= 2; j++) {
+                const key = `chk-${i}-${j}`;
+                checklistItems[key] = document.getElementById(key).checked;
+            }
+        }
+
+        const newRecord = {
+            id: 'tbm-' + Date.now(),
+            date: date,
+            zone: zone,
+            inspector: inspector,
+            checklist: checklistItems,
+            logs: JSON.parse(JSON.stringify(state.logs)) // deep copy
+        };
+
+        // Check if there is already a record for the same date and zone to avoid duplication
+        const existingIdx = state.savedRecords.findIndex(r => r.date === date && r.zone === zone);
+        if(existingIdx !== -1) {
+            customConfirm('기록 덮어쓰기', '동일 일자와 공종에 입력된 기존 기록이 존재합니다. 덮어쓰시겠습니까?', () => {
+                state.savedRecords[existingIdx] = newRecord;
+                saveToStorage();
+                showToast('success', 'TBM 안전체크 결과가 업데이트 완료되었습니다.');
+            });
+        } else {
+            state.savedRecords.unshift(newRecord);
+            saveToStorage();
+            showToast('success', 'TBM 점검 결과가 이력에 안전하게 저장되었습니다.');
+        }
+    }
+
+    // Load state from history
+    function loadRecord(id) {
+        const record = state.savedRecords.find(r => r.id === id);
+        if(!record) return;
+
+        document.getElementById('tbm-date').value = record.date;
+        document.getElementById('tbm-zone').value = record.zone;
+        document.getElementById('tbm-inspector').value = record.inspector;
+
+        // Apply checklist checkbox states
+        for (let i = 1; i <= 4; i++) {
+            for (let j = 1; j <= 2; j++) {
+                const key = `chk-${i}-${j}`;
+                document.getElementById(key).checked = record.checklist ? !!record.checklist[key] : false;
+            }
+        }
+
+        state.logs = JSON.parse(JSON.stringify(record.logs || []));
+        renderWorkerLogs();
+        switchTab('dashboard');
+        showToast('success', `${record.date} 기록이 로드되어 점검화면으로 전환되었습니다.`);
+    }
+
+    // Delete a single record from storage
+    function deleteRecord(id) {
+        customConfirm('이력 기록 삭제', '선택하신 날짜의 TBM 점검 결과를 데이터베이스에서 완전히 삭제하시겠습니까?', () => {
+            state.savedRecords = state.savedRecords.filter(r => r.id !== id);
+            saveToStorage();
+            renderHistoryList();
+            showToast('warning', '이력 기록이 삭제되었습니다.');
+        });
+    }
+
+    // Save state to storage
+    function saveToStorage() {
+        localStorage.setItem('TBM_CHECKLIST_RECORDS', JSON.stringify(state.savedRecords));
+    }
+
+    // Load state from storage
+    function loadAllDataFromStorage() {
+        const data = localStorage.getItem('TBM_CHECKLIST_RECORDS');
+        if(data) {
+            try {
+                state.savedRecords = JSON.parse(data);
+            } catch (e) {
+                state.savedRecords = [];
+            }
+        }
+    }
+
+    // Reset current workspace
+    function resetCurrentForm() {
+        customConfirm('점검표 초기화', '작성 중인 모든 점검 내용을 지우고 새로운 시트로 시작할까요?', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tbm-date').value = today;
+            document.getElementById('tbm-zone').value = '';
+            document.getElementById('tbm-inspector').value = '';
+            
+            // Uncheck all boxes
+            for (let i = 1; i <= 4; i++) {
+                for (let j = 1; j <= 2; j++) {
+                    document.getElementById(`chk-${i}-${j}`).checked = false;
+                }
+            }
+            
+            state.logs = [];
+            renderWorkerLogs();
+            showToast('info', '점검 작성 화면이 완전히 초기화되었습니다.');
+        });
+    }
+
+    // Delete everything in storage
+    function clearAllData() {
+        customConfirm('전체 삭제 확인', '저장된 과거의 모든 TBM 체크리스트 데이터를 영구적으로 삭제하시겠습니까? (복구 불가능)', () => {
+            localStorage.removeItem('TBM_CHECKLIST_RECORDS');
+            state.savedRecords = [];
+            renderHistoryList();
+            showToast('error', '모든 보관 데이터가 영구적으로 삭제되었습니다.');
+        });
+    }
+
+    // Render History list of previous logs
+    function renderHistoryList() {
+        const container = document.getElementById('history-container');
+        container.innerHTML = '';
+
+        if(state.savedRecords.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-12 text-slate-400">
+                    <i class="fa-regular fa-folder-closed text-4xl mb-3 block text-slate-300"></i>
+                    저장된 과거 이력이 존재하지 않습니다.
+                </div>
+            `;
+            return;
+        }
+
+        state.savedRecords.forEach(record => {
+            const div = document.createElement('div');
+            div.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:shadow-sm transition";
+            
+            const anomalyCount = record.logs ? record.logs.length : 0;
+            const anomalyBadge = anomalyCount > 0 
+                ? `<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>이상자 조치 ${anomalyCount}명</span>`
+                : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-circle-check mr-1"></i>정상 점검완료</span>`;
+
+            div.innerHTML = `
+                <div class="space-y-1.5">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="bg-slate-900 text-white font-bold text-xs px-2.5 py-1 rounded">${record.date}</span>
+                        ${anomalyBadge}
+                    </div>
+                    <p class="text-sm text-slate-800 font-bold"><i class="fa-solid fa-map-location-dot text-slate-400 mr-1.5"></i>구역 / 공종: <span class="text-indigo-600">${escapeHtml(record.zone)}</span></p>
+                    <p class="text-xs text-slate-500"><i class="fa-solid fa-user-tie mr-1.5"></i>안전 관리자(점검자): ${escapeHtml(record.inspector)}</p>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto self-stretch md:self-auto justify-end">
+                    <button onclick="loadRecord('${record.id}')" class="bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-200 transition flex items-center gap-1.5 flex-1 md:flex-initial justify-center">
+                        <i class="fa-solid fa-folder-open text-slate-500"></i> 불러오기
+                    </button>
+                    <button onclick="deleteRecord('${record.id}')" class="bg-white hover:bg-rose-50 text-rose-600 text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:border-rose-200 transition flex items-center justify-center">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // Print window optimizer and exporter
+    function exportAndPrint() {
+        const zone = document.getElementById('tbm-zone').value.trim();
+        const inspector = document.getElementById('tbm-inspector').value.trim();
+
+        if(!zone || !inspector) {
+            showToast('warning', '잠깐! 인쇄물 상단에 표기될 점검구역과 점검자를 입력해 주시면 더욱 신뢰할 수 있는 서류 보고서가 생성됩니다.');
+        }
+
+        // Just launch print dialog, CSS @media print styles take care of rest
+        window.print();
+    }
+
+    // Escape HTML to prevent XSS injection
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+</script>
 </body>
 </html>
