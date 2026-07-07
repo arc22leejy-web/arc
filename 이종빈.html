@@ -3,871 +3,620 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TBM Human Factor Checklist Dashboard</title>
-    <!-- Tailwind CSS -->
+    <title>ê·¼ë¡œì íœ´ë¨¼ ì—ëŸ¬ & ì‹¬ë¦¬ ì²´í¬ë¦¬ìŠ¤íŠ¸ (Human Factor)</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Premium Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter & Noto Sans KR -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
+    <!-- Lucide Icons (for beautiful interface) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-        }
-        /* Custom print optimization styles */
-        @media print {
-            body {
-                background-color: white !important;
-                color: black !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-full-width {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                box-shadow: none !important;
-            }
-            .print-break-inside-prevent {
-                page-break-inside: avoid;
-            }
-            .print-border {
-                border: 1px solid #cbd5e1 !important;
-            }
+            font-family: 'Pretendard', sans-serif;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-<header class="bg-slate-900 text-white shadow-md no-print">
-    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3">
-            <div class="bg-amber-500 text-slate-950 p-2.5 rounded-xl shadow-inner flex items-center justify-center">
-                <i class="fa-solid fa-brain text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-lg sm:text-xl font-bold tracking-tight">TBM ÈŞ¸Õ ¿¡·¯ & ½É¸® ºĞ¼® ½Ã½ºÅÛ</h1>
-                <p class="text-xs text-slate-400">Human Factors & Safety Psychology Checklist</p>
-            </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-white border border-slate-700 hover:bg-slate-700 transition">
-                <i class="fa-solid fa-square-poll-horizontal mr-1.5"></i>Á¡°Ë µî·Ï
-            </button>
-            <button onclick="switchTab('history')" id="tab-btn-history" class="px-4 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
-                <i class="fa-solid fa-history mr-1.5"></i>°ú°Å ÀÌ·Â
-            </button>
-        </div>
-    </div>
-</header>
-
-<main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8 print-full-width">
-    
-    <div id="tab-dashboard" class="space-y-6">
-        
-        <!-- TBM ±âº» Á¤º¸ Ä«µå -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6 print-border">
-            <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-6 bg-amber-500 rounded-full"></span>
-                    <h2 class="text-base sm:text-lg font-bold text-slate-900">1. TBM ±âº» Á¤º¸ ÀÔ·Â</h2>
-                </div>
-                <span class="no-print bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full font-medium" id="live-clock">½Ã°£ µ¿±âÈ­ Áß...</span>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-amber-500 to-red-600 text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-6 md:py-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Á¡°Ë ÀÏÀÚ</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="date" id="tbm-date" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
-                    </div>
+                    <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        TBM (ì‘ì—… ì „ íšŒì˜) í•„ìˆ˜ ë„êµ¬
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-extrabold mt-2 flex items-center gap-2">
+                        <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                        ê·¼ë¡œì íœ´ë¨¼ ì—ëŸ¬ & ì‹¬ë¦¬ ì²´í¬ (Human Factor)
+                    </h1>
+                    <p class="text-amber-100 mt-1 text-sm md:text-base">
+                        í˜„ì¥ ì‚¬ê³ ì˜ 80%ëŠ” ë°©ì‹¬ê³¼ í”¼ë¡œì—ì„œ ì˜µë‹ˆë‹¤. ì§ê´€ì ì¸ ìŠ¤ìº”ìœ¼ë¡œ ì˜¤ëŠ˜ ì•„ì¹¨ì˜ ìœ„í—˜ì„ ì˜ˆë°©í•˜ì„¸ìš”.
+                    </p>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Á¡°Ë ±¸¿ª / °øÁ¾</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-map-location-dot absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="tbm-zone" placeholder="¿¹: A±¸¿ª ÁöÇÏ 1Ãş Ã¶±ÙÀÛ¾÷" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">TBM ÁøÇàÀÚ (Á¡°ËÀÚ)</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-user-check absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="tbm-inspector" placeholder="¼º¸íÀ» ÀÔ·ÂÇÏ¼¼¿ä" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4´ë ÇÙ½É ÈŞ¸Õ¿¡·¯ Á¡°Ë Ç×¸ñ Grid -->
-        <section class="space-y-4">
-            <div class="flex items-center gap-2">
-                <span class="w-2.5 h-6 bg-amber-500 rounded-full"></span>
-                <h2 class="text-base sm:text-lg font-bold text-slate-900">2. ¾ÆÄ§ TBM 4´ë ÈŞ¸Õ¿¡·¯ Á¡°Ë ¸®½ºÆ®</h2>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                
-                <!-- Ä«Å×°í¸® 1: ½ÅÃ¼ ¹× Á¤½Å °Ç°­ ½ºÄµ -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
-                    <div class="p-5 border-b border-slate-100 bg-slate-50">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">1</span>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">½ÅÃ¼ ¹× Á¤½Å °Ç°­ ½ºÄµ</h3>
-                                <p class="text-xs text-slate-500">Physiological & Psychological Scan</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 space-y-4 flex-grow">
-                        <!-- Ç×¸ñ 1 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-1-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-1-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">´«ºû ¹× Ç¥Á¤ ½ºÄµ</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">¿À´Ãµû¶ó À¯³­È÷ ÇÇ°ïÇØ º¸ÀÌ°Å³ª, ÃÊÁ¡ÀÌ ¸ÛÇÏ°Å³ª, Ç¥Á¤ÀÌ ¾îµÓ°í °¨Á¤ ±âº¹ÀÌ ½ÉÇØ º¸ÀÌ´Â ±Ù·ÎÀÚ°¡ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ÁıÁß·Â ÀúÇÏ »ç°í À§Çè 1¼øÀ§ ´ë»óÀÚ ºĞ·ù
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="border-slate-100">
-                        <!-- Ç×¸ñ 2 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-1-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-1-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">¼÷Ãë ¹× ¼ö¸é ºÎÁ· ÀÇ½É</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">°ÉÀ½°ÉÀÌ°¡ ºñÆ²°Å¸®°Å³ª ¾ğÇàÀÌ ´À¸®°í, ¼÷Ãë ³¿»õ µî Àü³¯ °úÀ½ÀÌ³ª ±Ø½ÉÇÑ ÇÇ·Î°¡ ÀÇ½ÉµÇ´Â ±Ù·ÎÀÚ°¡ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Áï½Ã °£ÀÌ À½ÁÖ ÃøÁ¤ ÈÄ ÇÊ¿ä½Ã ´çÀÏ °íÀ§Çè ÀÛ¾÷ ¹èÁ¦
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ä«Å×°í¸® 2: º£Å×¶û ÀÛ¾÷ ÅÂµµ °ü¸® -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
-                    <div class="p-5 border-b border-slate-100 bg-slate-50">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">2</span>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">º£Å×¶û ÀÛ¾÷ ÅÂµµ °ü¸®</h3>
-                                <p class="text-xs text-slate-500">Work Habit Management</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 space-y-4 flex-grow">
-                        <!-- Ç×¸ñ 3 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-2-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-2-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">"¿ø·¡ ÇÏ´ø ´ë·Î" ÁõÈÄ±º</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">"³»°¡ ÀÌ ÀÏ¸¸ 10³â ³Ñ°Ô Çß¾î"¶ó¸ç ¾ÈÀü¸ğ ÅÎ²ö ÇØÃ¼, ¾ÈÀü°í¸® Ã¼°á ±ÍÂúÀ½ µîÀ» Ç¥ÇöÇÏ´Â º£Å×¶ûÀÌ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> °ú½Å ¹æÁö Á¶Ä¡ ¹× ±âº» ¾ÈÀü ÁØ¼ö ¼­¾à È¯±â
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="border-slate-100">
-                        <!-- Ç×¸ñ 4 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-2-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-2-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">º¸È£±¸ Âø¿ëÀÇ Çü½ÄÈ­</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">¾ÈÀüº§Æ®¸¦ ´À½¼ÇÏ°Ô ¸Å°Å³ª, °¢ ÀÛ¾÷¿¡ ¸Â´Â Àü¿ë º¸È£±¸(º¸¾È°æ, ¹æÁø¸¶½ºÅ© µî)¸¦ Âø¿ëÇÏÁö ¾ÊÀº ¼÷·Ã°øÀÌ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ÇöÀå¿¡¼­ Áï½Ã ¿Ã¹Ù¸¥ º¸È£±¸ Âø¿ë¹ı Àç½Ã¿¬ Áöµµ
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ä«Å×°í¸® 3: ÇöÀå ³» À¯ÇØ Çàµ¿ Â÷´Ü -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
-                    <div class="p-5 border-b border-slate-100 bg-slate-50">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-cyan-100 text-cyan-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">3</span>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">ÇöÀå ³» À¯ÇØ Çàµ¿ Â÷´Ü</h3>
-                                <p class="text-xs text-slate-500">Unsafe Behavior Control</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 space-y-4 flex-grow">
-                        <!-- Ç×¸ñ 5 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-3-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-3-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">½º¸¶Æ®Æù Á»ºñ ¹æÁö</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">ÀÌµ¿ ½Ã, È¤Àº Àåºñ(±¼Âø±â, Å©·¹ÀÎ µî) ¼±È¸ ¹İ°æ ³»¿¡¼­ ½º¸¶Æ®ÆùÀ» º¸¸ç °É¾î ´Ù´Ï´Â ±Ù·ÎÀÚ°¡ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> "ÀÌµ¿ Áß ½º¸¶Æ®Æù Àı´ë »ç¿ë ±İÁö" °­·Â ±³À°
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="border-slate-100">
-                        <!-- Ç×¸ñ 6 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-3-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-3-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">±ŞÇÏ°Ô ¼­µÎ¸£´Â Çàµ¿</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">ÀÛ¾÷ °³½Ã ÀüºÎÅÍ µµ±¸¸¦ Ã¬±â¸ç ¼­µÎ¸£°Å³ª, Á¤ÇØÁø Åë·Î°¡ ¾Æ´Ñ Áö¸§±æ(´ÜÃà °æ·Î)·Î ±ŞÈ÷ ÀÌµ¿ÇÏ·Á´Â ÀÛ¾÷ÀÚ°¡ ÀÖ´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ÀÛ¾÷ ¼ø¼­ ÀçÀÎÁö À¯µµ ¹× ºÒ¾ÈÀü ÀÌµ¿ ÅëÁ¦
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ä«Å×°í¸® 4: °íÀ§Çè¡¤Ãë¾à ±Ù·ÎÀÚ ÄÉ¾î -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between print-border print-break-inside-prevent">
-                    <div class="p-5 border-b border-slate-100 bg-slate-50">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-rose-100 text-rose-700 w-8 h-8 rounded-lg flex items-center justify-center font-bold">4</span>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">°íÀ§Çè¡¤Ãë¾à ±Ù·ÎÀÚ ÄÉ¾î</h3>
-                                <p class="text-xs text-slate-500">Vulnerable Workers Care</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 space-y-4 flex-grow">
-                        <!-- Ç×¸ñ 7 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-4-1" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-4-1" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">½Å±Ô ¹× ¿Ü±¹ÀÎ ¹ĞÂø ¸¶Å©</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">¿À´Ã Ã³À½ ÅõÀÔµÈ ½Å±Ô ±Ù·ÎÀÚ³ª ÇÑ±¹¾î°¡ ¼­Å÷ ¿Ü±¹ÀÎ ±Ù·ÎÀÚ ¿·¿¡ '¼ÒÅë °¡ÀÌµå(¾ÈÀü ¸àÅä)'°¡ ÁöÁ¤µÇ¾ú´Â°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> ¸àÅä ÁöÁ¤ ¿©ºÎ È®ÀÎ ¹× ÀÌÇØÇÏ±â ½¬¿î ºñÁÖ¾ó Áö½Ã¼­ ¹èÆ÷
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="border-slate-100">
-                        <!-- Ç×¸ñ 8 -->
-                        <div class="flex gap-3 items-start group">
-                            <input type="checkbox" id="chk-4-2" class="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500/30 cursor-pointer mt-0.5 transition shrink-0">
-                            <div>
-                                <label for="chk-4-2" class="font-bold text-slate-800 text-sm cursor-pointer hover:text-amber-600 transition block">°í·ÉÀÚ ¹× Áöº´ º¸À¯ÀÚ ÄÉ¾î</label>
-                                <span class="text-xs text-slate-500 block mt-1 leading-relaxed">°íÇ÷¾Ğ µî ±â¿ÕÁõÀÌ ÀÖ°Å³ª È¤¼­±â/È¤ÇÑ±â ±â¿Â ¿µÇâÀ» ¸¹ÀÌ ¹Ş´Â °í·É ±Ù·ÎÀÚÀÇ ÄÁµğ¼ÇÀº ¾çÈ£ÇÑ°¡?</span>
-                                <div class="mt-2 bg-amber-50 text-amber-800 text-[11px] px-2 py-1 rounded border border-amber-100/50 inline-block font-medium">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Ç÷¾Ğ ¼öÄ¡ È®ÀÎ ¹× ±×´Ã¸· È°¿ë ÃæºĞÇÑ ÈŞ½Ä Á¦°ø
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ÀÌ»ó Â¡ÈÄ ÀÛ¾÷ÀÚ Á¶Ä¡ ±â·Ï ¼½¼Ç -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6 print-border print-break-inside-prevent">
-            <div class="border-b border-slate-100 pb-4 mb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-6 bg-rose-500 rounded-full"></span>
+                <div class="bg-black/20 p-3 rounded-lg text-sm flex items-center gap-3 w-full md:w-auto">
+                    <i data-lucide="calendar" class="text-amber-300 w-5 h-5 flex-shrink-0"></i>
                     <div>
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900">3. ÀÌ»ó Â¡ÈÄ ÀÛ¾÷ÀÚ Á¶Ä¡ ÇöÈ²</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">ÈŞ¸Õ¿¡·¯ °íÀ§Çè±ºÀÌ ¹ß°ßµÇ¾úÀ» ¶§ ¼¼ºÎ Á¶Ä¡»çÇ×À» ½Ç½Ã°£ µî·ÏÇÏ¼¼¿ä.</p>
+                        <div class="font-medium">ì ê²€ ì¼ì</div>
+                        <div id="current-date" class="text-amber-200 font-bold">2026. 07. 07 (í™”)</div>
                     </div>
                 </div>
-                <button type="button" onclick="openLogModal()" class="no-print bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5">
-                    <i class="fa-solid fa-user-plus text-sm"></i> ÀÛ¾÷ÀÚ µî·Ï
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- 4ëŒ€ í•µì‹¬ ì²´í¬í¬ì¸íŠ¸ ì•ˆë‚´ (ê°€ì´ë“œ ìš”ì•½) -->
+        <section class="mb-8">
+            <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                <i data-lucide="info" class="text-blue-500 w-5 h-5"></i>
+                ì˜¤ëŠ˜ ì•„ì¹¨ TBM í•„ìˆ˜ ê´€ì°° ê°€ì´ë“œ
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- ì¹´ë“œ 1 -->
+                <div class="bg-white p-4 rounded-xl border-l-4 border-red-500 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2 bg-red-50 text-red-500 rounded-lg">
+                            <i data-lucide="eye" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">ëˆˆë¹›Â·í‘œì • ìŠ¤ìº”</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">í”¼ê³¤í•˜ê±°ë‚˜ ë©í•œ í‘œì •, ê°ì • ê¸°ë³µì´ ì‹¬í•œ ê·¼ë¡œì ì§‘ì¤‘ ê´€ë¦¬ (ì§‘ì¤‘ë ¥ ì €í•˜ ì‚¬ê³  1ìˆœìœ„)</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ì¹´ë“œ 2 -->
+                <div class="bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2 bg-amber-50 text-amber-500 rounded-lg">
+                            <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">"ì›ë˜ í•˜ë˜ ëŒ€ë¡œ" ì¦í›„êµ°</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">"ë‚´ê°€ 10ë…„ ë„˜ê²Œ í–ˆì–´"ë¼ë©° ì•ˆì „ ì¡°ì¹˜ë¥¼ ê·€ì°®ì•„í•˜ëŠ” ë² í…Œë‘ì˜ ê³¼ì‹  ë°©ì§€</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ì¹´ë“œ 3 -->
+                <div class="bg-white p-4 rounded-xl border-l-4 border-yellow-500 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2 bg-yellow-50 text-yellow-500 rounded-lg">
+                            <i data-lucide="smartphone-off" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">ìŠ¤ë§ˆíŠ¸í° ì¢€ë¹„ ë°©ì§€</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">ì´ë™ ì¤‘ì´ê±°ë‚˜ ì¥ë¹„ ì„ íšŒ ë°˜ê²½ ë‚´ì—ì„œ ìŠ¤ë§ˆíŠ¸í°ì„ ë³´ë©° ë³´í–‰í•˜ëŠ” í–‰ë™ ì°¨ë‹¨</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ì¹´ë“œ 4 -->
+                <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start gap-3">
+                        <div class="p-2 bg-blue-50 text-blue-500 rounded-lg">
+                            <i data-lucide="users-round" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">ì‹ ê·œ ë° ì™¸êµ­ì¸ ì „ë‹´</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">ì˜¤ëŠ˜ ì²˜ìŒ ì˜¨ ê·¼ë¡œìë‚˜ í•œêµ­ì–´ê°€ ì„œíˆ° ì™¸êµ­ì¸ì—ê²Œ ë©˜í† (ì†Œí†µ ê°€ì´ë“œ) ì§€ì • í•„ìˆ˜</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left: ê·¼ë¡œì ë“±ë¡ ë° ì…ë ¥ í¼ -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="user-plus" class="text-amber-500"></i>
+                        ìŠ¤ìº” ëŒ€ìƒ ê·¼ë¡œì ë“±ë¡
+                    </h2>
+                    
+                    <form id="worker-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">ê·¼ë¡œì ì„±ëª…</label>
+                            <input type="text" id="worker-name" required placeholder="ì˜ˆ: í™ê¸¸ë™, ê¹€ì² ìˆ˜" 
+                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">ê³µì •/ì‘ì—…êµ¬ë¶„</label>
+                                <select id="worker-role" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm">
+                                    <option value="ë¹„ê³„ê³µ">ë¹„ê³„ê³µ</option>
+                                    <option value="ì² ê·¼ê³µ">ì² ê·¼ê³µ</option>
+                                    <option value="í˜•í‹€ëª©ê³µ">í˜•í‹€ëª©ê³µ</option>
+                                    <option value="ì½˜í¬ë¦¬íŠ¸ê³µ">ì½˜í¬ë¦¬íŠ¸ê³µ</option>
+                                    <option value="ì¥ë¹„ì¡°ì¢…ì›">ì¥ë¹„ì¡°ì¢…ì›</option>
+                                    <option value="ì¼ë°˜ì¸ë¶€">ì¼ë°˜ì¸ë¶€</option>
+                                    <option value="ê¸°íƒ€">ê¸°íƒ€</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">ê·¼ë¬´ í˜•íƒœ</label>
+                                <select id="worker-type" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm">
+                                    <option value="ì¼ë°˜">ì¼ë°˜ ê·¼ë¡œì</option>
+                                    <option value="ë² í…Œë‘">ë² í…Œë‘ (10ë…„+)</option>
+                                    <option value="ì‹ ê·œ">ì‹ ê·œ ì…ì‚¬ì</option>
+                                    <option value="ì™¸êµ­ì¸">ì™¸êµ­ì¸ ê·¼ë¡œì</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-4">
+                            <span class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">ì‹¬ë¦¬ ë° í–‰ë™ ìƒíƒœ ìŠ¤ìº” (ì¤‘ë³µ ì²´í¬ ê°€ëŠ¥)</span>
+                            
+                            <div class="space-y-3">
+                                <!-- í•­ëª© 1 -->
+                                <label class="flex items-start gap-3 p-2 rounded-lg hover:bg-red-50/50 cursor-pointer transition-colors border border-transparent hover:border-red-100">
+                                    <input type="checkbox" id="factor-fatigue" class="mt-1 w-4 h-4 text-red-600 border-slate-300 rounded focus:ring-red-500">
+                                    <div>
+                                        <span class="text-sm font-semibold text-red-700 block">ëˆˆë¹› ë° í‘œì • ì´ìƒ</span>
+                                        <span class="text-xs text-slate-500 block leading-tight">í”¼ë¡œ, ë©í•¨, ê°ì • ê¸°ë³µ, ë¬´í‘œì • ë˜ëŠ” ì–´ë‘ìš´ ë‚¯ë¹›</span>
+                                    </div>
+                                </label>
+
+                                <!-- í•­ëª© 2 -->
+                                <label class="flex items-start gap-3 p-2 rounded-lg hover:bg-amber-50/50 cursor-pointer transition-colors border border-transparent hover:border-amber-100">
+                                    <input type="checkbox" id="factor-overconfidence" class="mt-1 w-4 h-4 text-amber-600 border-slate-300 rounded focus:ring-amber-500">
+                                    <div>
+                                        <span class="text-sm font-semibold text-amber-700 block">"ì›ë˜ í•˜ë˜ ëŒ€ë¡œ" (ê³¼ì‹ )</span>
+                                        <span class="text-xs text-slate-500 block leading-tight">ì•ˆì „ìˆ˜ì¹™ ìƒëµ, ê³ ë¦¬ ì²´ê²° ê·€ì°®ì•„í•¨, ê³ ì§‘ ì„±í–¥</span>
+                                    </div>
+                                </label>
+
+                                <!-- í•­ëª© 3 -->
+                                <label class="flex items-start gap-3 p-2 rounded-lg hover:bg-yellow-50/50 cursor-pointer transition-colors border border-transparent hover:border-yellow-100">
+                                    <input type="checkbox" id="factor-smartphone" class="mt-1 w-4 h-4 text-yellow-600 border-slate-300 rounded focus:ring-yellow-500">
+                                    <div>
+                                        <span class="text-sm font-semibold text-yellow-700 block">ìŠ¤ë§ˆíŠ¸í° ìœ„í—˜ ì‚¬ìš©</span>
+                                        <span class="text-xs text-slate-500 block leading-tight">ì´ë™ ì¤‘ ì‹œì„  ê³ ì •, ìœ„í—˜ êµ¬ì—­ ë‚´ í° ì£¼ì‹œ</span>
+                                    </div>
+                                </label>
+
+                                <!-- í•­ëª© 4 -->
+                                <label class="flex items-start gap-3 p-2 rounded-lg hover:bg-blue-50/50 cursor-pointer transition-colors border border-transparent hover:border-blue-100">
+                                    <input type="checkbox" id="factor-no-mentor" class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
+                                    <div>
+                                        <span class="text-sm font-semibold text-blue-700 block">ì†Œí†µ ë° ë©˜í†  ë¯¸ì§€ì •</span>
+                                        <span class="text-xs text-slate-500 block leading-tight">ì‹ ê·œ/ì™¸êµ­ì¸ ì¤‘ ì†Œí†µ ì „ë‹´ ê°€ì´ë“œ(ë©˜í† )ê°€ ì—†ëŠ” ìƒíƒœ</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-red-600 text-white font-bold py-3 px-4 rounded-xl hover:from-amber-600 hover:to-red-700 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="user-check"></i>
+                            TBM ì ê²€ ë¦¬ìŠ¤íŠ¸ ë“±ë¡
+                        </button>
+                    </form>
+                </div>
+
+                <!-- í†µê³„ ë° ìš”ì•½ -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-700 mb-3">ê¸ˆì¼ íœ´ë¨¼ ì—ëŸ¬ ìš”ì•½</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+                            <div class="text-xs font-semibold text-red-600">ê³ ìœ„í—˜ ê·¼ë¡œì</div>
+                            <div id="high-risk-count" class="text-2xl font-black text-red-700 mt-1">0ëª…</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <div class="text-xs font-semibold text-slate-500">ì´ ì ê²€ ì¸ì›</div>
+                            <div id="total-count" class="text-2xl font-black text-slate-700 mt-1">0ëª…</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: ì‹¤ì‹œê°„ ì ê²€ í˜„í™© í…Œì´ë¸” ë° ëª¨ë‹ˆí„°ë§ -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i data-lucide="clipboard-list" class="text-red-500"></i>
+                                TBM í˜„ì¥ ìŠ¤ìº” ë° ëª¨ë‹ˆí„°ë§ ë³´ë“œ
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1">
+                                ë¹¨ê°„ìƒ‰ í‘œì‹œ ê·¼ë¡œìëŠ” ì¦‰ì‹œ íŠ¹ë³„ ê´€ë¦¬(ìƒë‹´/ì£¼ì˜ í™˜ê¸°/ë©˜í†  ì§€ì •)ê°€ í•„ìš”í•©ë‹ˆë‹¤.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <select id="filter-risk" class="w-full sm:w-auto px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-amber-500">
+                                <option value="all">ì „ì²´ ìƒíƒœ ë³´ê¸°</option>
+                                <option value="high">ê³ ìœ„í—˜êµ°ë§Œ ë³´ê¸° (2ê°œ ì´ìƒ)</option>
+                                <option value="warning">ì£¼ì˜êµ°ë§Œ ë³´ê¸° (1ê°œ)</option>
+                                <option value="safe">ì •ìƒ ìƒíƒœë§Œ ë³´ê¸° (0ê°œ)</option>
+                            </select>
+                            <button id="clear-all" class="text-xs border border-slate-300 hover:bg-slate-50 text-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-1 font-medium transition-colors">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                ì „ì²´ ì´ˆê¸°í™”
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ì‹¤ì‹œê°„ ë°ì´í„° í…Œì´ë¸” -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs font-bold uppercase border-b border-slate-200">
+                                    <th class="py-3.5 px-6">ê·¼ë¡œì / ì—­í• </th>
+                                    <th class="py-3.5 px-6">ìŠ¤ìº” í•­ëª© ì²´í¬ ìƒíƒœ</th>
+                                    <th class="py-3.5 px-6">ìœ„í—˜ ë“±ê¸‰</th>
+                                    <th class="py-3.5 px-6 text-center">ì¡°ì¹˜ ë° ëª¨ë‹ˆí„°ë§</th>
+                                </tr>
+                            </thead>
+                            <tbody id="worker-table-body" class="divide-y divide-slate-100 text-sm">
+                                <!-- ìë°”ìŠ¤í¬ë¦½íŠ¸ë¡œ ë™ì  ë Œë”ë§ -->
+                                <tr id="no-data-row">
+                                    <td colspan="4" class="py-12 px-6 text-center text-slate-400">
+                                        <div class="flex flex-col items-center justify-center gap-2">
+                                            <i data-lucide="folder-open" class="w-12 h-12 text-slate-300"></i>
+                                            <span class="font-medium">ë“±ë¡ëœ TBM ì ê²€ ëŒ€ìƒìê°€ ì—†ìŠµë‹ˆë‹¤.</span>
+                                            <span class="text-xs text-slate-400">ì™¼ìª½ í¼ì—ì„œ ê·¼ë¡œìë¥¼ ë“±ë¡í•˜ê³  ìŠ¤ìº”ì„ ì‹œì‘í•˜ì„¸ìš”.</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ì•„ì¹¨ TBM íŠ¹ë³„ ì•ˆì „ ìˆ˜ì¹™ ì•ˆë‚´íŒ -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                    <h3 class="text-base font-bold text-amber-900 flex items-center gap-2 mb-3">
+                        <i data-lucide="megaphone" class="text-amber-600"></i>
+                        íœ´ë¨¼ ì—ëŸ¬ ìœ„í—˜ì ëŒ€ìƒ ì¦‰ê° ì¡°ì¹˜ ê°€ì´ë“œ
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-amber-800">
+                        <div class="space-y-2">
+                            <div class="flex items-start gap-2">
+                                <span class="bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold mt-0.5">ì¡°ì¹˜ 1</span>
+                                <p><strong>ëˆˆë¹› ë¬´í‘œì •/í”¼ë¡œ ì˜ì‹¬ì:</strong> ì¦‰ì‹œ ì‹œì›í•œ ìŒë£Œë¥¼ ì œê³µí•˜ê³ , ê°€ë²¼ìš´ ëŒ€í™”ë¥¼ ìœ ë„í•´ ì¸ì§€ë ¥ì„ ì ê²€í•˜ì„¸ìš”. í•„ìš”ì‹œ ì˜¤ì „ì—ëŠ” ê³ ì†Œ ì‘ì—… ë° ê¸°ê³„ ì¡°ì¢… ë“± ê³ ìœ„í—˜ ê³µì •ì—ì„œ ì¼ì‹œ ì œì™¸í•©ë‹ˆë‹¤.</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold mt-0.5">ì¡°ì¹˜ 2</span>
+                                <p><strong>"ì›ë˜ í•˜ë˜ ëŒ€ë¡œ" ë² í…Œë‘:</strong> ê¶Œìœ„ë¥¼ ë¬´ì‹œí•˜ê¸°ë³´ë‹¤ëŠ” "íŒ€ì¥ë‹˜ì´ ì†”ì„ ìˆ˜ë²”í•˜ì…”ì•¼ ì Šì€ ì¹œêµ¬ë“¤ì´ ì•ˆì „ ê³ ë¦¬ë¥¼ ê²ë‹ˆë‹¤"ë¼ë©° ì±…ì„ê°ê³¼ ëª¨ë²”ì„ ì •ì¤‘íˆ ìœ ë„í•˜ì„¸ìš”.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-start gap-2">
+                                <span class="bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold mt-0.5">ì¡°ì¹˜ 3</span>
+                                <p><strong>ìŠ¤ë§ˆíŠ¸í° ë°€ì°© ë§ˆí¬:</strong> ìœ„í—˜ ê¸°ê³„ ë°˜ê²½ ë‚´ ë³´í–‰ ì‹œ ë°˜ë“œì‹œ ê²½ê³ í•˜ê³ , TBM ì‹œê°„ ë° ì´ë™ êµ¬ê°„ì—ì„  ìŠ¤ë§ˆíŠ¸í°ì„ ì£¼ë¨¸ë‹ˆì— ë„£ë„ë¡ ê°•ë ¥íˆ ì•½ì¡°ë¥¼ ë°›ìŠµë‹ˆë‹¤.</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold mt-0.5">ì¡°ì¹˜ 4</span>
+                                <p><strong>ì‹ ê·œÂ·ì™¸êµ­ì¸ ê·¼ë¡œì:</strong> 1:1 'ì†Œí†µ ê°€ì´ë“œ(ë©˜í† )'ê°€ ì§€ì •ë˜ì§€ ì•Šì•˜ë‹¤ë©´ í•´ë‹¹ ë°˜ì˜ ìµœê³ ì°¸ê¸‰ ë˜ëŠ” ì–¸ì–´ ì†Œí†µì´ ê°€ëŠ¥í•œ í•œêµ­ì¸ ê´€ë¦¬ìë¥¼ ë°˜ë“œì‹œ ë§¤ì¹­í•œ í›„ ì‘ì—…ì„ ì§€ì‹œí•˜ì„¸ìš”.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Modal for Alerts (To avoid default alert()) -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl p-6 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="flex items-center gap-3 text-red-600 mb-4">
+                <i data-lucide="alert-triangle" class="w-8 h-8 flex-shrink-0"></i>
+                <h3 class="text-xl font-bold" id="modal-title">ê²½ê³ </h3>
+            </div>
+            <p class="text-slate-600 text-sm mb-6" id="modal-message">ëª¨ë‹¬ ë©”ì‹œì§€ ë‚´ìš©ì´ ë“¤ì–´ê°‘ë‹ˆë‹¤.</p>
+            <div class="flex justify-end gap-3">
+                <button id="modal-close-btn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg text-sm transition-colors">
+                    ë‹«ê¸°
                 </button>
             </div>
-
-            <!-- µî·ÏµÈ Á¶Ä¡ ±â·Ï Å×ÀÌºí -->
-            <div class="overflow-x-auto border border-slate-100 rounded-xl">
-                <table class="w-full text-left border-collapse min-w-[700px]">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-600">
-                            <th class="px-4 py-3.5">¼º¸í</th>
-                            <th class="px-4 py-3.5">¼Ò¼Ó / °øÁ¾</th>
-                            <th class="px-4 py-3.5">¹ß°ßµÈ ÀÌ»ó »óÅÂ</th>
-                            <th class="px-4 py-3.5">½ÇÇà Á¶Ä¡ ³»¿ë</th>
-                            <th class="px-4 py-3.5 text-center">Á¶Ä¡ ÇöÈ²</th>
-                            <th class="px-4 py-3.5 text-center no-print">ÀÛ¾÷</th>
-                        </tr>
-                    </thead>
-                    <tbody id="worker-log-tbody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Dynamic Rows loaded by Javascript -->
-                        <tr id="empty-row">
-                            <td colspan="6" class="px-4 py-12 text-center text-slate-400">
-                                <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
-                                ¿À´Ã ¹ß°ß ¹× Á¶Ä¡µÈ Æ¯ÀÌ »çÇ×ÀÌ ¾ø½À´Ï´Ù.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- ¾ÈÀü °ü¸®ÀÚ¿ë °¡ÀÌµå ¶óÀÎ ÆÁ -->
-        <section class="bg-amber-50/50 rounded-2xl border border-amber-200/50 p-5 sm:p-6 no-print">
-            <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2 mb-3">
-                <i class="fa-solid fa-circle-info text-amber-600"></i>
-                ¾ÈÀü °ü¸®ÀÚ¸¦ À§ÇÑ TBM ½É¸®ÇĞ °¡ÀÌµå (Tips)
-            </h3>
-            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-amber-800 leading-relaxed">
-                <li class="flex gap-2">
-                    <span class="text-amber-600 font-bold shrink-0">1. ´« ¸¶ÁÖÄ¡¸ç ÀÎ»çÇÏ±â:</span>
-                    <span>Çü½ÄÀûÀÎ ¿ÜÄ§ ´ë½Å ¸ğµç ±Ù·ÎÀÚÀÇ ´«À» 2~3ÃÊ °£ Á÷Á¢ ¸¶ÁÖÄ¡¸ç ¼ÒÅëÇÏ¼¼¿ä. ´«µ¿ÀÚÀÇ Èû°ú Ç¥Á¤ º¯È­¸¸À¸·Îµµ ÁıÁß·Â°ú ¼ö¸é »óÅÂ¸¦ 80% ÀÌ»ó ÆÄ¾ÇÇÒ ¼ö ÀÖ½À´Ï´Ù.</span>
-                </li>
-                <li class="flex gap-2">
-                    <span class="text-amber-600 font-bold shrink-0">2. ±¸Ã¼ÀûÀÎ ÁöÀû È®ÀÎ:</span>
-                    <span>"¿À´Ã ¾ÈÀü°í¸®´Â ¾î´À ÁöÁ¡¿¡ Ã¼°áÇØ¾ß ÇÏÁÒ?"¿Í °°ÀÌ µ¹¹ß Áú¹®À» ´øÁ® ±Ù·ÎÀÚÀÇ Áö°¢À» ÀÏ±ú¿ì°í ±â°èÀûÀÎ ¼ö¶ôÀû ´äº¯ ¹æÁö¸¦ À¯µµÇÏ¼¼¿ä.</span>
-                </li>
-            </ul>
-        </section>
-
-        <!-- ÀÛ¾÷ ¼öÇà ¹Ù -->
-        <div class="flex flex-wrap justify-end gap-3 no-print pt-4 border-t border-slate-200">
-            <button onclick="resetCurrentForm()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold px-5 py-3 rounded-xl transition shadow-sm flex items-center gap-2">
-                <i class="fa-solid fa-arrow-rotate-right text-slate-400"></i> »õ ±â·Ï ÀÛ¼º
-            </button>
-            <button onclick="saveChecklist()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> ºê¶ó¿ìÀú ÀúÀå
-            </button>
-            <button onclick="exportAndPrint()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2">
-                <i class="fa-solid fa-print"></i> º¸°í¼­ ÀÎ¼â / PDF ÀúÀå
-            </button>
-        </div>
-
-    </div>
-
-    <!-- °ú°Å ÀÌ·Â ÅÇ -->
-    <div id="tab-history" class="hidden space-y-6">
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-6">
-            <div class="border-b border-slate-100 pb-4 mb-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-6 bg-indigo-500 rounded-full"></span>
-                    <h2 class="text-base sm:text-lg font-bold text-slate-900">°ú°Å TBM Ã¼Å©¸®½ºÆ® ÀúÀå ±â·Ï</h2>
-                </div>
-                <button onclick="clearAllData()" class="text-rose-600 hover:text-rose-800 text-xs font-semibold px-3 py-1.5 hover:bg-rose-50 rounded-lg transition">
-                    <i class="fa-solid fa-trash-can mr-1"></i> ÀüÃ¼ ±â·Ï »èÁ¦
-                </button>
-            </div>
-
-            <!-- ÀúÀå ¸ñ·Ï ¸®½ºÆ® -->
-            <div class="space-y-4" id="history-container">
-                <!-- Javascript will load the list here -->
-                <div class="text-center py-12 text-slate-400">
-                    <i class="fa-regular fa-folder-closed text-4xl mb-3 block text-slate-300"></i>
-                    ÀúÀåµÈ °ú°Å ÀÌ·ÂÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.
-                </div>
-            </div>
-        </section>
-    </div>
-
-</main>
-
-<!-- ÀÌ»ó Â¡ÈÄ ±Ù·ÎÀÚ µî·Ï Modal (Alert ´ë¿ë) -->
-<div id="log-modal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 no-print">
-    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden transform scale-95 transition-all duration-300" id="log-modal-content">
-        <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-            <h3 class="font-bold flex items-center gap-2 text-sm sm:text-base">
-                <i class="fa-solid fa-user-plus text-amber-500"></i>
-                ÀÌ»ó »óÅÂ ±Ù·ÎÀÚ Á¶Ä¡ µî·Ï
-            </h3>
-            <button onclick="closeLogModal()" class="text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">±Ù·ÎÀÚ¸í</label>
-                    <input type="text" id="modal-worker-name" placeholder="¿¹: È«±æµ¿" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">¼Ò¼Ó / °øÁ¾</label>
-                    <input type="text" id="modal-worker-role" placeholder="¿¹: Ã¶±Ù°ø" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
-                </div>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">°üÂûµÈ ÀÌ»ó Â¡ÈÄ</label>
-                <input type="text" id="modal-worker-symptom" placeholder="¿¹: ±Ø½ÉÇÑ ¼ö¸éºÎÁ· È£¼Ò, ÃæÇ÷ÀÌ ½ÉÇÔ" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">ÇöÀå Á¶Ä¡ »çÇ×</label>
-                <textarea id="modal-worker-action" rows="2" placeholder="¿¹: ´çÀÏ °í¼ÒÀÛ¾÷¿¡¼­ Á¦¿ÜÇÏ°í Áö»óÃş Á¤¸®ÀÛ¾÷ ¹× ¸àÅä ¹ĞÂø¸¶Å© ÀüÈ¯" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition resize-none"></textarea>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-2">Á¶Ä¡ Ã³¸® ¿Ï·á ¿©ºÎ</label>
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer text-sm">
-                        <input type="radio" name="modal-worker-status" value="monitoring" checked class="w-4 h-4 border-slate-300 text-amber-500 focus:ring-amber-500">
-                        <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-hourglass-half mr-1"></i>°üÂû ¹× ÇÇµå¹é</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer text-sm">
-                        <input type="radio" name="modal-worker-status" value="completed" class="w-4 h-4 border-slate-300 text-emerald-500 focus:ring-emerald-500">
-                        <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded font-semibold"><i class="fa-solid fa-check-double mr-1"></i>Á¶Ä¡ ¿Ï·á ÈÄ ÅõÀÔ</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="bg-slate-50 px-6 py-4 flex justify-end gap-2 border-t border-slate-100">
-            <button onclick="closeLogModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 transition">Ãë¼Ò</button>
-            <button onclick="addWorkerLog()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">Ãß°¡ µî·Ï</button>
         </div>
     </div>
-</div>
 
-<!-- Custom Toast Notification System (Alert ´ë¿ë) -->
-<div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 no-print"></div>
+    <!-- JavaScript For Interaction and Logic -->
+    <script>
+        // ì´ˆê¸° ìƒ˜í”Œ ë°ì´í„°
+        let workers = [
+            { id: 1, name: 'ì´ë¯¼ìˆ˜', role: 'ë¹„ê³„ê³µ', type: 'ë² í…Œë‘', factors: { fatigue: true, overconfidence: true, smartphone: false, noMentor: false }, date: '2026. 07. 07' },
+            { id: 2, name: 'íƒ€í‹°ì•ˆ', role: 'í˜•í‹€ëª©ê³µ', type: 'ì™¸êµ­ì¸', factors: { fatigue: false, overconfidence: false, smartphone: false, noMentor: true }, date: '2026. 07. 07' },
+            { id: 3, name: 'ë°•ì¤€í˜', role: 'ì² ê·¼ê³µ', type: 'ì‹ ê·œ', factors: { fatigue: true, overconfidence: false, smartphone: true, noMentor: false }, date: '2026. 07. 07' },
+            { id: 4, name: 'ì •íƒœí˜¸', role: 'ì¥ë¹„ì¡°ì¢…ì›', type: 'ì¼ë°˜', factors: { fatigue: false, overconfidence: false, smartphone: false, noMentor: false }, date: '2026. 07. 07' }
+        ];
 
-<!-- Custom Confirmation Modal (Confirm ´ë¿ë) -->
-<div id="confirm-modal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 no-print">
-    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden transform scale-95 transition-all duration-300" id="confirm-modal-content">
-        <div class="p-6">
-            <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 text-xl mb-4">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <h4 class="font-bold text-slate-900 mb-2 text-sm sm:text-base" id="confirm-title">È®ÀÎ ÇÊ¿ä</h4>
-            <p class="text-xs text-slate-500 leading-relaxed" id="confirm-message">ÀÌ ÀÛ¾÷À» °è¼ÓÇÏ½Ã°Ú½À´Ï±î?</p>
-        </div>
-        <div class="bg-slate-50 px-6 py-3 flex justify-end gap-2 border-t border-slate-100">
-            <button id="confirm-cancel-btn" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 transition">Ãë¼Ò</button>
-            <button id="confirm-success-btn" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow">¼öÇà</button>
-        </div>
-    </div>
-</div>
-
-<footer class="bg-slate-100 border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12 no-print">
-    <div class="max-w-7xl mx-auto px-4">
-        <p class="font-medium">¨Ï 2026 TBM Human Factors & Safety System. All rights reserved.</p>
-        <p class="text-[10px] text-slate-400 mt-1">ÇöÀå ÀçÇØ °¨ÃàÀ» À§ÇÑ ÈŞ¸Õ ¿¡·¯ ¸ğ´ÏÅÍ¸µ Ã¼Å©¸®½ºÆ® ½Ã½ºÅÛ</p>
-    </div>
-</footer>
-
-<script>
-    // State management
-    let state = {
-        activeTab: 'dashboard',
-        logs: [], // Current day's worker anomaly logs
-        savedRecords: [] // Entire history stored in LocalStorage
-    };
-
-    // Initialize Page
-    window.onload = function() {
-        // Set date input dynamically to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('tbm-date').value = today;
-
-        // Initialize clock
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Load data from localStorage
-        loadAllDataFromStorage();
-
-        // Render current state
-        renderWorkerLogs();
-        renderHistoryList();
-    };
-
-    // Live clock update
-    function updateClock() {
-        const now = new Date();
-        const str = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }) + ' ' + now.toLocaleTimeString('ko-KR');
-        document.getElementById('live-clock').innerText = str;
-    }
-
-    // Tab Switching Logic
-    function switchTab(tabId) {
-        state.activeTab = tabId;
+        // DOM ìš”ì†Œ ë¡œë“œ
+        const workerForm = document.getElementById('worker-form');
+        const workerNameInput = document.getElementById('worker-name');
+        const workerRoleSelect = document.getElementById('worker-role');
+        const workerTypeSelect = document.getElementById('worker-type');
         
-        const tabs = ['dashboard', 'history'];
-        tabs.forEach(t => {
-            const tabEl = document.getElementById(`tab-${t}`);
-            const btnEl = document.getElementById(`tab-btn-${t}`);
-            if (t === tabId) {
-                tabEl.classList.remove('hidden');
-                btnEl.className = "px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-white border border-slate-700 transition shadow-inner";
-            } else {
-                tabEl.classList.add('hidden');
-                btnEl.className = "px-4 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition";
-            }
-        });
+        const checkFatigue = document.getElementById('factor-fatigue');
+        const checkOverconfidence = document.getElementById('factor-overconfidence');
+        const checkSmartphone = document.getElementById('factor-smartphone');
+        const checkNoMentor = document.getElementById('factor-no-mentor');
 
-        if(tabId === 'history') {
-            renderHistoryList();
-        }
-    }
+        const workerTableBody = document.getElementById('worker-table-body');
+        const totalCountEl = document.getElementById('total-count');
+        const highRiskCountEl = document.getElementById('high-risk-count');
+        const filterRiskSelect = document.getElementById('filter-risk');
+        const clearAllBtn = document.getElementById('clear-all');
 
-    // Modal Operations
-    function openLogModal() {
-        const modal = document.getElementById('log-modal');
-        const content = document.getElementById('log-modal-content');
-        modal.classList.remove('pointer-events-none', 'opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-    }
+        // ì»¤ìŠ¤í…€ ëª¨ë‹¬ ìš”ì†Œ
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
 
-    function closeLogModal() {
-        const modal = document.getElementById('log-modal');
-        const content = document.getElementById('log-modal-content');
-        modal.classList.add('pointer-events-none', 'opacity-0');
-        content.classList.remove('scale-100');
-        content.classList.add('scale-95');
-        // Clear modal form
-        document.getElementById('modal-worker-name').value = '';
-        document.getElementById('modal-worker-role').value = '';
-        document.getElementById('modal-worker-symptom').value = '';
-        document.getElementById('modal-worker-action').value = '';
-    }
+        // ì˜¤ëŠ˜ ë‚ ì§œ í‘œì‹œ (ì‹¤ì œ 2026ë…„ ë‚ ì§œ)
+        const dateElement = document.getElementById('current-date');
+        const today = new Date();
+        const days = ['ì¼', 'ì›”', 'í™”', 'ìˆ˜', 'ëª©', 'ê¸ˆ', 'í† '];
+        dateElement.textContent = `${today.getFullYear()}. ${String(today.getMonth() + 1).padStart(2, '0')}. ${String(today.getDate()).padStart(2, '0')} (${days[today.getDay()]})`;
 
-    // Custom Dialog for Confirmation
-    function customConfirm(title, message, onConfirm) {
-        const modal = document.getElementById('confirm-modal');
-        const content = document.getElementById('confirm-modal-content');
-        document.getElementById('confirm-title').innerText = title;
-        document.getElementById('confirm-message').innerText = message;
-        
-        modal.classList.remove('pointer-events-none', 'opacity-0');
-        content.classList.remove('scale-95');
-        content.classList.add('scale-100');
-
-        const successBtn = document.getElementById('confirm-success-btn');
-        const cancelBtn = document.getElementById('confirm-cancel-btn');
-
-        // Cleanup handlers
-        const cleanup = () => {
-            modal.classList.add('pointer-events-none', 'opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-        };
-
-        successBtn.onclick = () => {
-            onConfirm();
-            cleanup();
-        };
-
-        cancelBtn.onclick = () => {
-            cleanup();
-        };
-    }
-
-    // Toast Messages
-    function showToast(type, text) {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        
-        let bg = 'bg-slate-900';
-        let icon = 'fa-circle-info';
-        if(type === 'success') {
-            bg = 'bg-emerald-600';
-            icon = 'fa-circle-check';
-        } else if (type === 'error') {
-            bg = 'bg-rose-600';
-            icon = 'fa-triangle-exclamation';
-        } else if (type === 'warning') {
-            bg = 'bg-amber-600';
-            icon = 'fa-circle-exclamation';
-        }
-
-        toast.className = `${bg} text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transition duration-300 translate-y-2 opacity-0 font-medium`;
-        toast.innerHTML = `<i class="fa-solid ${icon} text-sm"></i> <span>${text}</span>`;
-        container.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.remove('translate-y-2', 'opacity-0');
-        }, 10);
-
-        setTimeout(() => {
-            toast.classList.add('translate-y-2', 'opacity-0');
+        // ëª¨ë‹¬ íŒì—… í•¨ìˆ˜
+        function showAlert(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message;
+            modalBackdrop.classList.remove('hidden');
             setTimeout(() => {
-                toast.remove();
-            }, 300);
-        }, 3000);
-    }
-
-    // Add Worker anomaly log to table
-    function addWorkerLog() {
-        const name = document.getElementById('modal-worker-name').value.trim();
-        const role = document.getElementById('modal-worker-role').value.trim();
-        const symptom = document.getElementById('modal-worker-symptom').value.trim();
-        const action = document.getElementById('modal-worker-action').value.trim();
-        const status = document.querySelector('input[name="modal-worker-status"]:checked').value;
-
-        if (!name || !role || !symptom || !action) {
-            showToast('error', '¸ğµç ÀÔ·Â¶õÀ» ÀÛ¼ºÇØ ÁÖ¼¼¿ä.');
-            return;
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
         }
 
-        const newLog = {
-            id: 'worker-' + Date.now(),
-            name: name,
-            role: role,
-            symptom: symptom,
-            action: action,
-            status: status
-        };
-
-        state.logs.push(newLog);
-        renderWorkerLogs();
-        closeLogModal();
-        showToast('success', `${name} ÀÛ¾÷ÀÚÀÇ »óÅÂ ·Î±×°¡ ÀÓ½Ã µî·ÏµÇ¾ú½À´Ï´Ù.`);
-    }
-
-    // Delete Log item
-    function deleteWorkerLog(id) {
-        state.logs = state.logs.filter(log => log.id !== id);
-        renderWorkerLogs();
-        showToast('warning', 'ÀÛ¾÷ÀÚ Á¶Ä¡ ·Î±×°¡ ÇØÁ¦µÇ¾ú½À´Ï´Ù.');
-    }
-
-    // Toggle log status in table directly
-    function toggleLogStatus(id) {
-        const log = state.logs.find(l => l.id === id);
-        if(log) {
-            log.status = (log.status === 'completed') ? 'monitoring' : 'completed';
-            renderWorkerLogs();
-            showToast('success', `${log.name} ÀÛ¾÷ÀÚÀÇ Á¶Ä¡ »óÅÂ°¡ º¯°æµÇ¾ú½À´Ï´Ù.`);
-        }
-    }
-
-    // Render anomaly logs table
-    function renderWorkerLogs() {
-        const tbody = document.getElementById('worker-log-tbody');
-        tbody.innerHTML = '';
-
-        if(state.logs.length === 0) {
-            tbody.innerHTML = `
-                <tr id="empty-row">
-                    <td colspan="6" class="px-4 py-12 text-center text-slate-400">
-                        <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
-                        ¿À´Ã ¹ß°ß ¹× Á¶Ä¡µÈ Æ¯ÀÌ »çÇ×ÀÌ ¾ø½À´Ï´Ù.
-                    </td>
-                </tr>
-            `;
-            return;
+        // ëª¨ë‹¬ ë‹«ê¸°
+        function closeModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+            }, 200);
         }
 
-        state.logs.forEach(log => {
-            const tr = document.createElement('tr');
-            tr.className = "hover:bg-slate-50/50 transition";
-            
-            const statusBadge = log.status === 'completed' 
-                ? `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold cursor-pointer" onclick="toggleLogStatus('${log.id}')"><i class="fa-solid fa-check mr-1"></i>Á¶Ä¡ ¿Ï·á</span>`
-                : `<span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-semibold cursor-pointer animate-pulse" onclick="toggleLogStatus('${log.id}')"><i class="fa-solid fa-hourglass-half mr-1"></i>°üÂû ¿ä¸Á</span>`;
-
-            tr.innerHTML = `
-                <td class="px-4 py-3.5 font-bold text-slate-800">${escapeHtml(log.name)}</td>
-                <td class="px-4 py-3.5 text-slate-600 font-medium">${escapeHtml(log.role)}</td>
-                <td class="px-4 py-3.5 text-rose-600 font-semibold">${escapeHtml(log.symptom)}</td>
-                <td class="px-4 py-3.5 text-slate-600">${escapeHtml(log.action)}</td>
-                <td class="px-4 py-3.5 text-center">${statusBadge}</td>
-                <td class="px-4 py-3.5 text-center no-print">
-                    <button onclick="deleteWorkerLog('${log.id}')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded transition">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
         });
-    }
 
-    // Save current state of checklist to browser Storage
-    function saveChecklist() {
-        const date = document.getElementById('tbm-date').value;
-        const zone = document.getElementById('tbm-zone').value.trim();
-        const inspector = document.getElementById('tbm-inspector').value.trim();
-
-        if(!zone || !inspector) {
-            showToast('error', '±âº» Á¤º¸(Á¡°Ë±¸¿ª, Á¡°ËÀÚ)¸¦ ÀÔ·ÂÇØ¾ß ÀÌ·Â ÀúÀåÀÌ °¡´ÉÇÕ´Ï´Ù.');
-            return;
+        // ìœ„í—˜ ìš”ì†Œ ê°œìˆ˜ ê³„ì‚°
+        function getRiskCount(factors) {
+            return Object.values(factors).filter(v => v).length;
         }
 
-        // Capture checkbox states
-        const checklistItems = {};
-        for (let i = 1; i <= 4; i++) {
-            for (let j = 1; j <= 2; j++) {
-                const key = `chk-${i}-${j}`;
-                checklistItems[key] = document.getElementById(key).checked;
-            }
+        // ìœ„í—˜ ë‹¨ê³„ íŒŒì•…
+        function getRiskLevel(count) {
+            if (count >= 2) return { text: 'ê³ ìœ„í—˜ (ìƒë‹´/ì¡°ì¹˜)', color: 'bg-red-100 text-red-800 border-red-200', dot: 'bg-red-500' };
+            if (count === 1) return { text: 'ì£¼ì˜ (ë°€ì°© ëª¨ë‹ˆí„°)', color: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-500' };
+            return { text: 'ì •ìƒ (ì‘ì—… ê°€ëŠ¥)', color: 'bg-emerald-100 text-emerald-800 border-emerald-200', dot: 'bg-emerald-500' };
         }
 
-        const newRecord = {
-            id: 'tbm-' + Date.now(),
-            date: date,
-            zone: zone,
-            inspector: inspector,
-            checklist: checklistItems,
-            logs: JSON.parse(JSON.stringify(state.logs)) // deep copy
-        };
+        // ê°€ì´ë“œ ë©”ì‹œì§€ ë°˜í™˜
+        function getActionAdvice(worker) {
+            const adviceList = [];
+            if (worker.factors.fatigue) adviceList.push("ğŸ˜´ <strong>í”¼ë¡œ ì´ìƒ:</strong> ì˜¤ëŠ˜ í•˜ë£¨ ìœ„í—˜ ê¸°ê³„ ë° ìœ„í—˜ ê³ ì†Œ ì‘ì—… ì„ì‹œ ì œì™¸ ê¶Œì¥.");
+            if (worker.factors.overconfidence) adviceList.push("ğŸ—ï¸ <strong>ê³¼ì‹  ì„±í–¥:</strong> íŒ€ì›ë“¤ ëª¨ë²”ì„ ìœ„í•œ íŠ¹ë³„ ì„œì•½(ê³ ë¦¬ ì²´ê²°) ìœ ë„.");
+            if (worker.factors.smartphone) adviceList.push("ğŸ“± <strong>ìŠ¤ë§ˆíŠ¸í° ì§‘ì¤‘:</strong> í˜„ì¥ ìŠ¤ë§ˆíŠ¸í° íŒŒìš°ì¹˜ ë³´ê´€ ë˜ëŠ” ë³´í–‰ ì¤‘ ë³´ì§€ ì•Šê¸° íŠ¹ë³„ ê²½ê³ .");
+            if (worker.factors.noMentor) adviceList.push("ğŸ¤ <strong>ë©˜í†  ê³µë°±:</strong> ë² í…Œë‘ 1:1 ë©˜í†  ì¦‰ê° ì§€ì • í•„ìš”.");
+            
+            return adviceList.length > 0 ? adviceList.join("<br>") : "âœ… <strong>ì •ìƒ:</strong> ì‚¬ì „ ì¤€ë¹„ ì²´ì¡° ì™„ë£Œ ë° ì •ìƒ ì‘ì—… ê°€ëŠ¥ ìƒíƒœ.";
+        }
 
-        // Check if there is already a record for the same date and zone to avoid duplication
-        const existingIdx = state.savedRecords.findIndex(r => r.date === date && r.zone === zone);
-        if(existingIdx !== -1) {
-            customConfirm('±â·Ï µ¤¾î¾²±â', 'µ¿ÀÏ ÀÏÀÚ¿Í °øÁ¾¿¡ ÀÔ·ÂµÈ ±âÁ¸ ±â·ÏÀÌ Á¸ÀçÇÕ´Ï´Ù. µ¤¾î¾²½Ã°Ú½À´Ï±î?', () => {
-                state.savedRecords[existingIdx] = newRecord;
-                saveToStorage();
-                showToast('success', 'TBM ¾ÈÀüÃ¼Å© °á°ú°¡ ¾÷µ¥ÀÌÆ® ¿Ï·áµÇ¾ú½À´Ï´Ù.');
+        // ë Œë”ë§ í•¨ìˆ˜
+        function renderWorkers() {
+            const filter = filterRiskSelect.value;
+            const filteredWorkers = workers.filter(w => {
+                const count = getRiskCount(w.factors);
+                if (filter === 'high') return count >= 2;
+                if (filter === 'warning') return count === 1;
+                if (filter === 'safe') return count === 0;
+                return true;
             });
-        } else {
-            state.savedRecords.unshift(newRecord);
-            saveToStorage();
-            showToast('success', 'TBM Á¡°Ë °á°ú°¡ ÀÌ·Â¿¡ ¾ÈÀüÇÏ°Ô ÀúÀåµÇ¾ú½À´Ï´Ù.');
-        }
-    }
 
-    // Load state from history
-    function loadRecord(id) {
-        const record = state.savedRecords.find(r => r.id === id);
-        if(!record) return;
-
-        document.getElementById('tbm-date').value = record.date;
-        document.getElementById('tbm-zone').value = record.zone;
-        document.getElementById('tbm-inspector').value = record.inspector;
-
-        // Apply checklist checkbox states
-        for (let i = 1; i <= 4; i++) {
-            for (let j = 1; j <= 2; j++) {
-                const key = `chk-${i}-${j}`;
-                document.getElementById(key).checked = record.checklist ? !!record.checklist[key] : false;
+            // ë¹ˆ ìƒíƒœ ì²˜ë¦¬
+            if (filteredWorkers.length === 0) {
+                workerTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="py-12 px-6 text-center text-slate-400">
+                            <div class="flex flex-col items-center justify-center gap-2">
+                                <i data-lucide="filter" class="w-10 h-10 text-slate-300"></i>
+                                <span class="font-medium">í•„í„°ë§ëœ ê²°ê³¼ê°€ ì—†ìŠµë‹ˆë‹¤.</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
             }
-        }
 
-        state.logs = JSON.parse(JSON.stringify(record.logs || []));
-        renderWorkerLogs();
-        switchTab('dashboard');
-        showToast('success', `${record.date} ±â·ÏÀÌ ·ÎµåµÇ¾î Á¡°ËÈ­¸éÀ¸·Î ÀüÈ¯µÇ¾ú½À´Ï´Ù.`);
-    }
-
-    // Delete a single record from storage
-    function deleteRecord(id) {
-        customConfirm('ÀÌ·Â ±â·Ï »èÁ¦', '¼±ÅÃÇÏ½Å ³¯Â¥ÀÇ TBM Á¡°Ë °á°ú¸¦ µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ ¿ÏÀüÈ÷ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?', () => {
-            state.savedRecords = state.savedRecords.filter(r => r.id !== id);
-            saveToStorage();
-            renderHistoryList();
-            showToast('warning', 'ÀÌ·Â ±â·ÏÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.');
-        });
-    }
-
-    // Save state to storage
-    function saveToStorage() {
-        localStorage.setItem('TBM_CHECKLIST_RECORDS', JSON.stringify(state.savedRecords));
-    }
-
-    // Load state from storage
-    function loadAllDataFromStorage() {
-        const data = localStorage.getItem('TBM_CHECKLIST_RECORDS');
-        if(data) {
-            try {
-                state.savedRecords = JSON.parse(data);
-            } catch (e) {
-                state.savedRecords = [];
-            }
-        }
-    }
-
-    // Reset current workspace
-    function resetCurrentForm() {
-        customConfirm('Á¡°ËÇ¥ ÃÊ±âÈ­', 'ÀÛ¼º ÁßÀÎ ¸ğµç Á¡°Ë ³»¿ëÀ» Áö¿ì°í »õ·Î¿î ½ÃÆ®·Î ½ÃÀÛÇÒ±î¿ä?', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('tbm-date').value = today;
-            document.getElementById('tbm-zone').value = '';
-            document.getElementById('tbm-inspector').value = '';
+            workerTableBody.innerHTML = '';
             
-            // Uncheck all boxes
-            for (let i = 1; i <= 4; i++) {
-                for (let j = 1; j <= 2; j++) {
-                    document.getElementById(`chk-${i}-${j}`).checked = false;
-                }
-            }
-            
-            state.logs = [];
-            renderWorkerLogs();
-            showToast('info', 'Á¡°Ë ÀÛ¼º È­¸éÀÌ ¿ÏÀüÈ÷ ÃÊ±âÈ­µÇ¾ú½À´Ï´Ù.');
-        });
-    }
+            filteredWorkers.forEach(w => {
+                const riskCount = getRiskCount(w.factors);
+                const riskLevel = getRiskLevel(riskCount);
+                
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50 transition-colors ${riskCount >= 2 ? 'bg-red-50/20' : ''}`;
+                
+                // ê·¼ë¬´í˜•íƒœ ë±ƒì§€
+                let typeBadge = '';
+                if (w.type === 'ë² í…Œë‘') typeBadge = '<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">ê²½ë ¥10ë…„+</span>';
+                else if (w.type === 'ì‹ ê·œ') typeBadge = '<span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-1.5 py-0.5 rounded">ì‹ ê·œì…ì‚¬</span>';
+                else if (w.type === 'ì™¸êµ­ì¸') typeBadge = '<span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-1.5 py-0.5 rounded">ì™¸êµ­ì¸</span>';
+                else typeBadge = '<span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded">ì¼ë°˜</span>';
 
-    // Delete everything in storage
-    function clearAllData() {
-        customConfirm('ÀüÃ¼ »èÁ¦ È®ÀÎ', 'ÀúÀåµÈ °ú°ÅÀÇ ¸ğµç TBM Ã¼Å©¸®½ºÆ® µ¥ÀÌÅÍ¸¦ ¿µ±¸ÀûÀ¸·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î? (º¹±¸ ºÒ°¡´É)', () => {
-            localStorage.removeItem('TBM_CHECKLIST_RECORDS');
-            state.savedRecords = [];
-            renderHistoryList();
-            showToast('error', '¸ğµç º¸°ü µ¥ÀÌÅÍ°¡ ¿µ±¸ÀûÀ¸·Î »èÁ¦µÇ¾ú½À´Ï´Ù.');
-        });
-    }
-
-    // Render History list of previous logs
-    function renderHistoryList() {
-        const container = document.getElementById('history-container');
-        container.innerHTML = '';
-
-        if(state.savedRecords.length === 0) {
-            container.innerHTML = `
-                <div class="text-center py-12 text-slate-400">
-                    <i class="fa-regular fa-folder-closed text-4xl mb-3 block text-slate-300"></i>
-                    ÀúÀåµÈ °ú°Å ÀÌ·ÂÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.
-                </div>
-            `;
-            return;
-        }
-
-        state.savedRecords.forEach(record => {
-            const div = document.createElement('div');
-            div.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:shadow-sm transition";
-            
-            const anomalyCount = record.logs ? record.logs.length : 0;
-            const anomalyBadge = anomalyCount > 0 
-                ? `<span class="bg-rose-100 text-rose-800 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>ÀÌ»óÀÚ Á¶Ä¡ ${anomalyCount}¸í</span>`
-                : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-circle-check mr-1"></i>Á¤»ó Á¡°Ë¿Ï·á</span>`;
-
-            div.innerHTML = `
-                <div class="space-y-1.5">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="bg-slate-900 text-white font-bold text-xs px-2.5 py-1 rounded">${record.date}</span>
-                        ${anomalyBadge}
+                // 4ëŒ€ ì²´í¬ ìƒíƒœ í‘œì‹œ
+                const checksHtml = `
+                    <div class="flex flex-wrap gap-1.5 max-w-xs">
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${w.factors.fatigue ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-400'}" title="ëˆˆë¹›/í‘œì • ì´ìƒ">
+                            ëˆˆë¹›Â·í‘œì • ${w.factors.fatigue ? 'ğŸš¨' : 'âœ“'}
+                        </span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${w.factors.overconfidence ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-400'}" title="ì›ë˜ í•˜ë˜ ëŒ€ë¡œ ì¦í›„êµ°">
+                            ê³¼ì‹  ${w.factors.overconfidence ? 'ğŸš¨' : 'âœ“'}
+                        </span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${w.factors.smartphone ? 'bg-yellow-100 text-yellow-700' : 'bg-slate-100 text-slate-400'}" title="ìŠ¤ë§ˆíŠ¸í° ì¢€ë¹„">
+                            í° ${w.factors.smartphone ? 'ğŸš¨' : 'âœ“'}
+                        </span>
+                        <span class="px-2 py-0.5 rounded text-[11px] font-medium ${w.factors.noMentor ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-400'}" title="ë©˜í†  ë¶€ì¬">
+                            ë©˜í†  ${w.factors.noMentor ? 'ğŸš¨' : 'âœ“'}
+                        </span>
                     </div>
-                    <p class="text-sm text-slate-800 font-bold"><i class="fa-solid fa-map-location-dot text-slate-400 mr-1.5"></i>±¸¿ª / °øÁ¾: <span class="text-indigo-600">${escapeHtml(record.zone)}</span></p>
-                    <p class="text-xs text-slate-500"><i class="fa-solid fa-user-tie mr-1.5"></i>¾ÈÀü °ü¸®ÀÚ(Á¡°ËÀÚ): ${escapeHtml(record.inspector)}</p>
-                </div>
-                <div class="flex items-center gap-2 w-full md:w-auto self-stretch md:self-auto justify-end">
-                    <button onclick="loadRecord('${record.id}')" class="bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-200 transition flex items-center gap-1.5 flex-1 md:flex-initial justify-center">
-                        <i class="fa-solid fa-folder-open text-slate-500"></i> ºÒ·¯¿À±â
-                    </button>
-                    <button onclick="deleteRecord('${record.id}')" class="bg-white hover:bg-rose-50 text-rose-600 text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:border-rose-200 transition flex items-center justify-center">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
+                `;
 
-    // Print window optimizer and exporter
-    function exportAndPrint() {
-        const zone = document.getElementById('tbm-zone').value.trim();
-        const inspector = document.getElementById('tbm-inspector').value.trim();
+                tr.innerHTML = `
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600 text-sm border-2 ${riskCount >= 2 ? 'border-red-300' : 'border-slate-200'}">
+                                ${w.name.charAt(0)}
+                            </div>
+                            <div>
+                                <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                                    ${w.name}
+                                    ${typeBadge}
+                                </div>
+                                <div class="text-xs text-slate-500">${w.role}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6">
+                        ${checksHtml}
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${riskLevel.color}">
+                            <span class="w-2 h-2 rounded-full ${riskLevel.dot}"></span>
+                            ${riskLevel.text}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="viewAdvice(${w.id})" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors">
+                                <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i> ì¡°ì¹˜ ì¡°ì–¸
+                            </button>
+                            <button onclick="deleteWorker(${w.id})" class="p-1.5 hover:bg-red-50 text-red-500 rounded-lg transition-colors" title="ì‚­ì œ">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                workerTableBody.appendChild(tr);
+            });
 
-        if(!zone || !inspector) {
-            showToast('warning', 'Àá±ñ! ÀÎ¼â¹° »ó´Ü¿¡ Ç¥±âµÉ Á¡°Ë±¸¿ª°ú Á¡°ËÀÚ¸¦ ÀÔ·ÂÇØ ÁÖ½Ã¸é ´õ¿í ½Å·ÚÇÒ ¼ö ÀÖ´Â ¼­·ù º¸°í¼­°¡ »ı¼ºµË´Ï´Ù.');
+            // í†µê³„ ìˆ˜ì¹˜ ì—…ë°ì´íŠ¸
+            updateStats();
+            // Lucide ì•„ì´ì½˜ ì¬ìƒì„±
+            lucide.createIcons();
         }
 
-        // Just launch print dialog, CSS @media print styles take care of rest
-        window.print();
-    }
+        // í†µê³„ ê°±ì‹ 
+        function updateStats() {
+            totalCountEl.textContent = `${workers.length}ëª…`;
+            const highRiskCount = workers.filter(w => getRiskCount(w.factors) >= 2).length;
+            highRiskCountEl.textContent = `${highRiskCount}ëª…`;
+            
+            // ìœ„í—˜ ì¸ì›ì´ ìƒê¸°ë©´ í…ìŠ¤íŠ¸ ê°•ì¡° ì²˜ë¦¬
+            if (highRiskCount > 0) {
+                highRiskCountEl.className = "text-2xl font-black text-red-700 mt-1 animate-pulse";
+            } else {
+                highRiskCountEl.className = "text-2xl font-black text-slate-700 mt-1";
+            }
+        }
 
-    // Escape HTML to prevent XSS injection
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-</script>
+        // 1:1 ê°€ì´ë“œ íŒì—…
+        window.viewAdvice = function(id) {
+            const worker = workers.find(w => w.id === id);
+            if (!worker) return;
+            
+            const riskCount = getRiskCount(worker.factors);
+            const statusClass = riskCount >= 2 ? 'text-red-600' : (riskCount === 1 ? 'text-amber-600' : 'text-emerald-600');
+            
+            const content = `
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div class="text-sm">
+                            <strong>ì„±ëª…:</strong> ${worker.name} (${worker.role} / ${worker.type})
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">ì¸ê°„ í–‰ë™í•™ì  ìš”ì¸ ë¶„ì„</span>
+                        <div class="space-y-2 text-sm text-slate-700">
+                            ${getActionAdvice(worker)}
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-100 pt-3 mt-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">ê´€ë¦¬ì±…ì„ì í–‰ë™ ì§€ì¹¨</span>
+                        <div class="p-3 bg-slate-50 rounded-lg text-xs leading-relaxed text-slate-600">
+                            "í˜„ì¥ì—ì„œì˜ íœ´ë¨¼ ì—ëŸ¬ëŠ” ë¹„ë‚œí•˜ê¸°ë³´ë‹¤ ì˜ˆë°©ì„ ìœ„í•œ ì†Œí†µì„ ì„ í–‰í•˜ëŠ” ê²ƒì´ íš¨ìœ¨ì ì…ë‹ˆë‹¤. ì•ˆì „ì„ ìœ„í•´ ì•½ì†ëœ ê°€ì´ë“œë¥¼ ì´í–‰í•˜ë„ë¡ ìœ ë„í•´ ì£¼ì„¸ìš”."
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showAlert(`[${worker.name}] ì†Œí†µ ë° ì•ˆì „ ì†”ë£¨ì…˜`, content);
+        };
+
+        // ê·¼ë¡œì ì‚­ì œ
+        window.deleteWorker = function(id) {
+            workers = workers.filter(w => w.id !== id);
+            renderWorkers();
+        };
+
+        // ì „ì²´ ì´ˆê¸°í™”
+        clearAllBtn.addEventListener('click', () => {
+            if (confirm("ì •ë§ë¡œ ì˜¤ëŠ˜ ì•„ì¹¨ì˜ ì ê²€ ë‚´ì—­ì„ ì „ë¶€ ì´ˆê¸°í™”í•˜ì‹œê² ìŠµë‹ˆê¹Œ?")) {
+                workers = [];
+                renderWorkers();
+            }
+        });
+
+        // ê·¼ë¡œì ë“±ë¡ ì´ë²¤íŠ¸
+        workerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = workerNameInput.value.trim();
+            const role = workerRoleSelect.value;
+            const type = workerTypeSelect.value;
+
+            const factors = {
+                fatigue: checkFatigue.checked,
+                overconfidence: checkOverconfidence.checked,
+                smartphone: checkSmartphone.checked,
+                noMentor: checkNoMentor.checked
+            };
+
+            const newWorker = {
+                id: Date.now(),
+                name,
+                role,
+                type,
+                factors,
+                date: '2026. 07. 07'
+            };
+
+            // ì ê²€ ë‚´ì—­ ì¶”ê°€
+            workers.unshift(newWorker);
+            renderWorkers();
+
+            // í¼ ì´ˆê¸°í™” ë° ì´ì „ ì…ë ¥ ë°©ì§€
+            workerForm.reset();
+
+            // ê³ ìœ„í—˜êµ° ì¦‰ê° ê²½ê³  (ì²´í¬ í•­ëª©ì´ 2ê°œ ì´ìƒì¸ ê²½ìš°)
+            const count = getRiskCount(factors);
+            if (count >= 2) {
+                showAlert(
+                    "âš ï¸ ê³ ìœ„í—˜ ì—ëŸ¬ ê´€ë¦¬ ëŒ€ìƒ ê°ì§€!", 
+                    `ë°©ê¸ˆ ë“±ë¡ëœ <strong>${name}</strong> ê·¼ë¡œìëŠ” ìŠ¤ìº” í•­ëª© ì¤‘ <strong>${count}ê°œ ì´ìƒ</strong>ì—ì„œ í”¼ë¡œ ë˜ëŠ” ì—ëŸ¬ ì§•í›„ê°€ í™•ì¸ë˜ì—ˆìŠµë‹ˆë‹¤.<br><br>ì•ˆì „ ê°€ì´ë“œì— ë§ì¶”ì–´ í˜„ì¥ íˆ¬ì… ì „ 1:1 ë©´ë‹´ì„ ê¶Œì¥í•©ë‹ˆë‹¤.`
+                );
+            }
+        });
+
+        // í•„í„° ë³€ê²½ ì‹œ ë¦¬ë Œë”ë§
+        filterRiskSelect.addEventListener('change', renderWorkers);
+
+        // ì´ˆê¸° í™”ë©´ ì„¤ì •
+        window.onload = function() {
+            renderWorkers();
+        };
+    </script>
 </body>
 </html>
